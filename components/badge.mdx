@@ -1,0 +1,67 @@
+---
+title: Badge
+description: Display an availability badge with pulse animation
+---
+
+The `Badget.astro` component displays an animated badge indicating immediate availability. It features a pulsing animation and is positioned absolutely in the top-right corner of its container.
+
+<Note>
+  The component filename contains a typo: `Badget.astro` instead of `Badge.astro`. This is preserved in the source code.
+</Note>
+
+## Props
+
+This component does not accept any props. It displays a fixed message "Disponibilidad inmediata" (Immediate availability).
+
+## Usage
+
+Import and use the Badge component in your Astro pages:
+
+```astro
+---
+import Badget from '../components/Badget.astro';
+---
+
+<section class="hero">
+    <Badget />
+    <!-- Other hero content -->
+</section>
+```
+
+## Example
+
+The Badge component is used in the hero section of the CV Staff Web project:
+
+```astro src/sections/hero.astro
+---
+import Badget from '../components/Badget.astro';
+import WelcomeCard from '../components/WelcomeCard.astro';
+---
+
+<section id="inicio" class="hero">
+    <Badget />
+    <WelcomeCard name='Nico Gaitán' description='...' />
+</section>
+```
+
+## Styling
+
+The Badge component includes:
+
+- **Background**: Primary brand color
+- **Border radius**: 2rem for pill shape
+- **Position**: Absolute positioning (top: 1rem, right: 1rem)
+- **Animation**: Continuous pulse effect that scales from 1 to 1.02
+- **Z-index**: Uses `var(--deco-layer)` for proper layering
+
+## Customization
+
+To customize the badge text, you would need to modify the component directly:
+
+```astro
+<div class="badget">
+    <span class="text">Your custom text</span>
+</div>
+```
+
+Alternatively, you could enhance the component to accept props for custom text and styling.

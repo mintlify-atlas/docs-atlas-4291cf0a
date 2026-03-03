@@ -1,0 +1,268 @@
+---
+title: Footer Section
+description: Site footer with social media links and copyright
+---
+
+The Footer section provides social media links and copyright information at the bottom of the CV site.
+
+## Overview
+
+This section includes:
+- Social media icon links
+- Copyright text
+- Centered layout
+- Hover animations
+
+## File Location
+
+```
+src/sections/footer.astro
+```
+
+## Structure
+
+```astro
+<footer>
+    <div class="rrss" role="list">
+        <!-- Social media links -->
+    </div>
+
+    <p class="copyright">
+        Diseñado y desarrollado con dedicación · 2026
+    </p>
+</footer>
+```
+
+## Social Media Links
+
+### LinkedIn
+
+```astro
+<a href="https://www.linkedin.com/in/ngaitangomez/" 
+   class="social-icon" 
+   aria-label="LinkedIn" 
+   target="_blank" 
+   rel="noopener noreferrer" 
+   role="listitem">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" width="32" height="32" stroke-width="1.5" aria-hidden="true">
+        <path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"></path>
+        <path d="M8 11l0 5"></path>
+        <path d="M8 8l0 .01"></path>
+        <path d="M12 16l0 -5"></path>
+        <path d="M16 16v-3a2 2 0 0 0 -4 0"></path>
+    </svg>
+</a>
+```
+
+**URL**: https://www.linkedin.com/in/ngaitangomez/  
+**Icon**: LinkedIn logo  
+**Accessibility**: `aria-label="LinkedIn"`, `aria-hidden="true"` on SVG
+
+### Behance
+
+```astro
+<a href="https://www.behance.net/nicogaitan94" 
+   class="social-icon" 
+   aria-label="GitHub" 
+   target="_blank" 
+   rel="noopener noreferrer" 
+   role="listitem">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" width="32" height="32" stroke-width="1.5" aria-hidden="true">
+        <path d="M3 18v-12h4.5a3 3 0 0 1 0 6a3 3 0 0 1 0 6h-4.5"></path>
+        <path d="M3 12l4.5 0"></path>
+        <path d="M14 13h7a3.5 3.5 0 0 0 -7 0v2a3.5 3.5 0 0 0 6.64 1"></path>
+        <path d="M16 6l3 0"></path>
+    </svg>
+</a>
+```
+
+**URL**: https://www.behance.net/nicogaitan94  
+**Icon**: Behance logo  
+**Note**: The aria-label says "GitHub" but should be "Behance" (likely a typo)
+
+## Styling
+
+### Footer Container
+
+```css
+footer {
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-light-grey);
+}
+```
+
+The footer has a subtle top border to separate it from the main content.
+
+### Social Icons Container
+
+```css
+.rrss {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+```
+
+Icons are centered horizontally with 1rem spacing.
+
+### Individual Icons
+
+```css
+.rrss .social-icon {
+    width: max-content;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: .5rem;
+    background-color: var(--color-light);
+    border-radius: 50%;
+    transition: var(--transition);
+}
+```
+
+**Features**:
+- Circular background (50% border-radius)
+- Light background color
+- Centered content
+- Smooth transitions
+
+### Hover Effects
+
+```css
+.rrss .social-icon:hover {
+    background-color: var(--color-light-grey);
+    transform: scale(1.1);
+}
+```
+
+On hover:
+- Background darkens slightly
+- Icon scales up 10%
+
+### SVG Icon Styling
+
+```css
+.rrss .social-icon svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    color: var(--color-primary);
+}
+```
+
+Icons are sized at 1.5rem and colored with the primary brand color.
+
+### Copyright Text
+
+```css
+.copyright {
+    font-size: 0.8rem;
+    color: var(--color-dark-grey);
+    text-align: center;
+    padding: 1.25rem 1rem 1rem;
+    max-width: 24rem;
+    margin: 0 auto;
+    line-height: 1.4;
+}
+```
+
+**Features**:
+- Small font size (0.8rem)
+- Centered alignment
+- Max width for readability
+- Subtle grey color
+
+## Accessibility
+
+### ARIA Roles and Labels
+
+- `role="list"` on container indicates a list of items
+- `role="listitem"` on each link for proper semantics
+- `aria-label` on links provides descriptive text for screen readers
+- `aria-hidden="true"` on SVGs hides decorative icons from screen readers
+
+### Link Security
+
+```html
+target="_blank" rel="noopener noreferrer"
+```
+
+External links open in new tabs with security attributes:
+- `noopener` - Prevents new page from accessing `window.opener`
+- `noreferrer` - Prevents referrer information from being sent
+
+### Keyboard Navigation
+
+All social icons are fully keyboard accessible as native `<a>` elements.
+
+## Customization
+
+### Update Social Links
+
+Replace the href values:
+
+```astro
+<a href="https://your-linkedin-url" class="social-icon" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer" role="listitem">
+    <!-- Icon SVG -->
+</a>
+```
+
+### Update Copyright Year
+
+```astro
+<p class="copyright">
+    Diseñado y desarrollado con dedicación · 2027
+</p>
+```
+
+### Fix Behance Aria-Label
+
+The second icon should have the correct label:
+
+```astro
+<a href="https://www.behance.net/nicogaitan94" 
+   class="social-icon" 
+   aria-label="Behance"  <!-- Changed from "GitHub" -->
+   target="_blank" 
+   rel="noopener noreferrer" 
+   role="listitem">
+```
+
+## Adding New Social Icons
+
+To add another social platform:
+
+```astro
+<a href="https://github.com/yourusername" 
+   class="social-icon" 
+   aria-label="GitHub" 
+   target="_blank" 
+   rel="noopener noreferrer" 
+   role="listitem">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" width="32" height="32" stroke-width="1.5" aria-hidden="true">
+        <!-- GitHub icon paths -->
+    </svg>
+</a>
+```
+
+**Steps**:
+1. Duplicate an existing link
+2. Update the `href` to the new social profile
+3. Update the `aria-label` to match the platform
+4. Replace the SVG with the appropriate icon
+5. Ensure `aria-hidden="true"` is on the SVG
+
+## Icon Sources
+
+The SVG icons appear to be from [Tabler Icons](https://tabler-icons.io/):
+- Consistent stroke width (1.5)
+- Rounded line caps and joins
+- 24x24 viewBox
+
+## Layout Position
+
+The footer is placed at the bottom of the page after all main sections. It's a direct child of the main layout.
+
+## Related Sections
+
+- [Contact Section](/sections/contact) - Primary contact methods
+- [Hero Section](/sections/hero) - LinkedIn CTA button

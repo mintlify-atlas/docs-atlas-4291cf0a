@@ -1,0 +1,298 @@
+---
+title: Styling & Theming
+description: Customize the visual appearance of your CV Staff website
+---
+
+## Overview
+
+CV Staff uses CSS custom properties (CSS variables) for theming, making it easy to customize colors, fonts, spacing, and other visual elements. All theme variables are defined in `src/layouts/Layout.astro`.
+
+## CSS Custom Properties
+
+### Color Palette
+
+#### Primary Colors
+
+```css
+--color-primary: #ad0000;          /* Main brand color */
+--color-primary-light: #ff9595;    /* Light variant */
+--color-primary-dark: #103056;     /* Dark variant */
+```
+
+#### Secondary Colors
+
+```css
+--color-secondary: #4caf50;        /* Secondary brand color */
+--color-secondary-light: #b9febc;  /* Light variant */
+--color-secondary-dark: #175119;   /* Dark variant */
+```
+
+#### Status Colors
+
+```css
+--color-alert: #e7b43c;   /* Warning/alert messages */
+--color-success: #269a57; /* Success states */
+--color-error: #e74c3c;   /* Error states */
+```
+
+#### Neutral Colors
+
+```css
+--color-background: #f2f2f2;  /* Page background */
+--color-dark: #000;            /* Pure black */
+--color-light: #fff;           /* Pure white */
+--color-dark-grey: #666;       /* Dark grey text */
+--color-light-grey: #cbcbcb;   /* Light grey borders */
+--color-text: #222222;         /* Default text color */
+```
+
+#### Utility Colors
+
+```css
+--color-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);  /* Drop shadow */
+--color-overlay: rgba(0, 0, 0, .2);             /* Overlay effect */
+```
+
+### Typography
+
+#### Font Families
+
+```css
+--font-body: 'Onest Variable', sans-serif;  /* Body text */
+--font-headline: "Unbounded", sans-serif;   /* Headlines */
+--font-monospace: "Courier New", monospace; /* Code */
+```
+
+<Note>
+  CV Staff uses Onest Variable font from Fontsource, which supports weights 100-900.
+</Note>
+
+#### Font Sizes
+
+```css
+--font-size-base: 16px;       /* Base font size */
+--font-size-large: 1.25rem;   /* Large text (20px) */
+--font-size-small: .875rem;   /* Small text (14px) */
+```
+
+### Layout & Spacing
+
+#### Border Radius
+
+```css
+--border-radius: 15px;  /* Default border radius */
+--rounded: 50%;         /* Fully rounded (circles) */
+```
+
+#### Container Widths
+
+```css
+--main-wrapper-xlarge: 1400px;  /* Extra large screens */
+--main-wrapper-large: 1200px;   /* Large screens */
+--main-wrapper-medium: 1024px;  /* Medium screens */
+--main-wrapper-small: 768px;    /* Small screens */
+```
+
+#### Spacing (Gaps)
+
+```css
+--gap-small: .5rem;    /* 8px */
+--gap-medium: 1rem;    /* 16px */
+--gap-large: 2rem;     /* 32px */
+--gap-xlarge: 3rem;    /* 48px */
+```
+
+### Animations
+
+```css
+--transition: all .3s ease-in-out;  /* Default transition */
+```
+
+### Z-Index Layers
+
+```css
+--loader-layer: 99999;  /* Loading screens */
+--modal-layer: 9999;    /* Modals and dialogs */
+--menu-layer: 999;      /* Navigation menus */
+--deco-layer: 99;       /* Decorative elements */
+--text-layer: 9;        /* Text content */
+--base-layer: 1;        /* Base content */
+--bg-layer: -1;         /* Background elements */
+```
+
+## Customizing the Theme
+
+### Method 1: Edit Layout.astro
+
+The recommended way to customize the theme is by editing `src/layouts/Layout.astro`:
+
+```astro title="src/layouts/Layout.astro"
+<style is:global>
+  :root {
+    /* Change your primary color */
+    --color-primary: #0066cc;
+    --color-primary-light: #3399ff;
+    --color-primary-dark: #004499;
+    
+    /* Update fonts */
+    --font-body: 'Inter', sans-serif;
+    
+    /* Adjust spacing */
+    --gap-large: 3rem;
+  }
+</style>
+```
+
+### Method 2: Override in Component Styles
+
+You can override variables in specific components:
+
+```astro
+<style>
+  .my-component {
+    /* Use theme variables */
+    color: var(--color-primary);
+    padding: var(--gap-medium);
+    border-radius: var(--border-radius);
+  }
+  
+  /* Override for this component only */
+  .my-component.special {
+    --color-primary: #ff0000;
+  }
+</style>
+```
+
+## Special Effects
+
+### Glassmorphism Cursor
+
+CV Staff includes a custom glassmorphism cursor effect:
+
+```css
+.cursor-outline {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 32px 0 rgba(173, 0, 0, 0.2);
+}
+```
+
+<Warning>
+  The custom cursor is automatically hidden on touch devices (max-width: 1024px) and for users who prefer reduced motion.
+</Warning>
+
+### Customizing the Cursor
+
+To change the cursor color, modify the box-shadow values in `Layout.astro:168-182`:
+
+```css
+.cursor-outline {
+  /* Change the red (173, 0, 0) to your primary color RGB */
+  box-shadow: 0 8px 32px 0 rgba(YOUR_R, YOUR_G, YOUR_B, 0.2);
+}
+```
+
+## Accessibility Features
+
+### Skip Link
+
+CV Staff includes a skip-to-content link for keyboard navigation:
+
+```css
+.skip-link {
+  position: absolute;
+  top: -3rem;
+  background: var(--color-primary);
+  color: var(--color-light);
+}
+```
+
+### Focus Styles
+
+```css
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+```
+
+### Reduced Motion
+
+The theme respects user motion preferences:
+
+```css
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  
+  .cursor-outline,
+  .cursor-dot {
+    display: none !important;
+  }
+}
+```
+
+## Responsive Design
+
+The theme includes responsive breakpoints:
+
+```css
+@media (max-width: 1024px) {
+  /* Tablet and mobile styles */
+  .cursor-outline,
+  .cursor-dot {
+    display: none !important;
+  }
+}
+```
+
+## Best Practices
+
+<CardGroup cols={2}>
+  <Card title="Use Variables" icon="code">
+    Always use CSS custom properties instead of hardcoded values for consistency.
+  </Card>
+  <Card title="Test Accessibility" icon="universal-access">
+    Ensure color contrast ratios meet WCAG standards when changing colors.
+  </Card>
+  <Card title="Mobile First" icon="mobile">
+    Test your customizations on mobile devices and different screen sizes.
+  </Card>
+  <Card title="Maintain Performance" icon="gauge-high">
+    Avoid adding heavy animations or effects that could impact performance.
+  </Card>
+</CardGroup>
+
+## Example: Dark Mode
+
+To add a dark mode, you could extend the CSS variables:
+
+```css
+:root {
+  /* Light mode (default) */
+  --color-background: #f2f2f2;
+  --color-text: #222222;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Dark mode */
+    --color-background: #1a1a1a;
+    --color-text: #e0e0e0;
+  }
+}
+```
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Profile Data" icon="user" href="/customization/profile-data">
+    Configure your personal and professional information
+  </Card>
+  <Card title="Environment Variables" icon="key" href="/customization/environment-variables">
+    Set up API keys and environment configuration
+  </Card>
+</CardGroup>

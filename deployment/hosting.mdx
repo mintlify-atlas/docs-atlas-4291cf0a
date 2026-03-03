@@ -1,0 +1,368 @@
+---
+title: Hosting Options
+description: Deploy your CV Staff Web application to production with recommended hosting platforms
+---
+
+## Overview
+
+CV Staff Web is built with Astro and generates static files, making it compatible with virtually any static hosting platform. This guide covers the most popular and recommended hosting options.
+
+## Recommended Platforms
+
+All of these platforms offer:
+- Free tier for personal/small projects
+- Automatic HTTPS/SSL certificates
+- Global CDN distribution
+- Automatic deployments from Git
+- Environment variable management
+
+## Vercel
+
+Vercel offers excellent support for Astro applications with zero configuration.
+
+### Quick Deploy
+
+1. **Install Vercel CLI** (optional):
+   ```bash
+   npm install -g vercel
+   ```
+
+2. **Deploy from CLI**:
+   ```bash
+   npm run build
+   vercel --prod
+   ```
+
+### Deploy from Git
+
+1. Push your code to GitHub, GitLab, or Bitbucket
+2. Visit [vercel.com](https://vercel.com) and sign in
+3. Click "New Project"
+4. Import your repository
+5. Vercel auto-detects Astro and configures:
+   - **Build Command**: `npm run build`
+   - **Output Directory**: `dist`
+   - **Install Command**: `npm install`
+
+6. Add environment variables:
+   - Go to Project Settings → Environment Variables
+   - Add `PUBLIC_GROQ_API_KEY` and other required variables
+
+7. Click "Deploy"
+
+### Custom Configuration
+
+Create `vercel.json` in your project root for advanced settings:
+
+```json
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "framework": "astro",
+  "regions": ["iad1"]
+}
+```
+
+## Netlify
+
+Netlify provides seamless deployment with excellent developer experience.
+
+### Quick Deploy
+
+1. **Install Netlify CLI**:
+   ```bash
+   npm install -g netlify-cli
+   ```
+
+2. **Deploy**:
+   ```bash
+   npm run build
+   netlify deploy --prod
+   ```
+
+### Deploy from Git
+
+1. Push your code to a Git repository
+2. Visit [netlify.com](https://netlify.com) and sign in
+3. Click "Add new site" → "Import an existing project"
+4. Connect your Git provider and select your repository
+5. Configure build settings:
+   - **Build command**: `npm run build`
+   - **Publish directory**: `dist`
+6. Add environment variables in Site Settings → Environment Variables
+7. Click "Deploy site"
+
+### Configuration File
+
+Create `netlify.toml` for custom configuration:
+
+```toml
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+```
+
+## Cloudflare Pages
+
+Cloudflare Pages offers global edge deployment with excellent performance.
+
+### Deploy from Git
+
+1. Push your code to GitHub or GitLab
+2. Visit [pages.cloudflare.com](https://pages.cloudflare.com)
+3. Sign in and click "Create a project"
+4. Connect your Git account and select repository
+5. Configure build settings:
+   - **Framework preset**: Astro
+   - **Build command**: `npm run build`
+   - **Build output directory**: `dist`
+6. Add environment variables in Settings → Environment Variables
+7. Click "Save and Deploy"
+
+### Wrangler CLI Deployment
+
+```bash
+npm install -g wrangler
+wrangler pages deploy dist
+```
+
+### Custom Headers and Redirects
+
+Create `public/_headers`:
+
+```
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+```
+
+Create `public/_redirects`:
+
+```
+/old-page /new-page 301
+/* /index.html 200
+```
+
+## GitHub Pages
+
+Free hosting directly from your GitHub repository.
+
+### Setup
+
+1. **Update `astro.config.mjs`**:
+   ```javascript
+   import { defineConfig } from 'astro/config';
+   
+   export default defineConfig({
+     site: 'https://username.github.io',
+     base: '/repository-name',
+   });
+   ```
+
+2. **Create GitHub Actions workflow** (`.github/workflows/deploy.yml`):
+   ```yaml
+   name: Deploy to GitHub Pages
+   
+   on:
+     push:
+       branches: [main]
+     workflow_dispatch:
+   
+   permissions:
+     contents: read
+     pages: write
+     id-token: write
+   
+   jobs:
+     build:
+       runs-on: ubuntu-latest
+       steps:
+         - name: Checkout
+           uses: actions/checkout@v4
+         
+         - name: Setup Node
+           uses: actions/setup-node@v4
+           with:
+             node-version: 18
+             cache: 'npm'
+         
+         - name: Install dependencies
+           run: npm ci
+         
+         - name: Build
+           run: npm run build
+           env:
+             PUBLIC_GROQ_API_KEY: ${{ secrets.PUBLIC_GROQ_API_KEY }}
+         
+         - name: Upload artifact
+           uses: actions/upload-pages-artifact@v2
+           with:
+             path: ./dist
+     
+     deploy:
+       needs: build
+       runs-on: ubuntu-latest
+       environment:
+         name: github-pages
+         url: ${{ steps.deployment.outputs.page_url }}
+       steps:
+         - name: Deploy to GitHub Pages
+           id: deployment
+           uses: actions/deploy-pages@v3
+   ```
+
+3. **Configure GitHub Pages**:
+   - Go to repository Settings → Pages
+   - Source: "GitHub Actions"
+   - Add secrets in Settings → Secrets and Variables → Actions
+
+## Render
+
+Render provides free static site hosting with automatic deployments.
+
+### Deploy from Git
+
+1. Visit [render.com](https://render.com) and sign in
+2. Click "New" → "Static Site"
+3. Connect your Git repository
+4. Configure:
+   - **Build Command**: `npm run build`
+   - **Publish Directory**: `dist`
+5. Add environment variables
+6. Click "Create Static Site"
+
+## Environment Variables Setup
+
+For all platforms, ensure you configure these environment variables:
+
+### Required Variables
+
+```bash
+PUBLIC_GROQ_API_KEY=your_groq_api_key_here
+```
+
+<Warning>
+  The `PUBLIC_` prefix exposes variables to client-side code. Only use this prefix for non-sensitive data or properly secured API keys.
+</Warning>
+
+### Platform-Specific Instructions
+
+- **Vercel**: Project Settings → Environment Variables → Add
+- **Netlify**: Site Settings → Environment Variables → Add variable
+- **Cloudflare**: Settings → Environment Variables → Add variable
+- **GitHub Pages**: Repository Settings → Secrets and Variables → Actions → New secret
+- **Render**: Environment → Add Environment Variable
+
+## Custom Domain Setup
+
+All platforms support custom domains:
+
+1. **Add domain in platform dashboard**:
+   - Vercel: Project Settings → Domains
+   - Netlify: Site Settings → Domain Management
+   - Cloudflare: Custom Domains
+   - GitHub Pages: Settings → Pages → Custom Domain
+
+2. **Configure DNS records**:
+   - For apex domain (example.com), use A or ALIAS records
+   - For subdomain (www.example.com), use CNAME record
+   - Follow platform-specific DNS instructions
+
+3. **SSL/HTTPS**: Automatically provisioned by all platforms
+
+## Performance Optimization
+
+### CDN Configuration
+
+All recommended platforms provide global CDN by default:
+- Static assets are cached at edge locations
+- Automatic compression (Brotli/Gzip)
+- HTTP/2 and HTTP/3 support
+
+### Caching Headers
+
+Optimize caching by configuring headers:
+
+**Netlify** (`netlify.toml`):
+```toml
+[[headers]]
+  for = "/_astro/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+```
+
+**Vercel** (`vercel.json`):
+```json
+{
+  "headers": [
+    {
+      "source": "/_astro/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    }
+  ]
+}
+```
+
+## Deployment Checklist
+
+Before deploying to production:
+
+- [ ] Run `npm run build` locally to verify successful build
+- [ ] Test the production build with `npm run preview`
+- [ ] Set all required environment variables on hosting platform
+- [ ] Configure custom domain (if applicable)
+- [ ] Set up SSL/HTTPS (automatic on all platforms)
+- [ ] Test all critical user paths after deployment
+- [ ] Configure error monitoring (optional)
+- [ ] Set up analytics (optional)
+
+## Monitoring and Analytics
+
+Consider adding these services:
+
+- **Vercel Analytics**: Built-in Web Vitals monitoring
+- **Netlify Analytics**: Server-side analytics
+- **Cloudflare Analytics**: Built-in traffic analytics
+- **Google Analytics**: Third-party analytics
+- **Sentry**: Error tracking and monitoring
+
+## Rollback and Versioning
+
+All platforms support instant rollbacks:
+
+- **Vercel**: Deployments tab → Previous deployment → Promote to Production
+- **Netlify**: Deploys tab → Previous deploy → Publish deploy
+- **Cloudflare**: Deployments → View build → Rollback
+- **GitHub Pages**: Revert commit and re-run workflow
+
+## Next Steps
+
+- Review [Build Configuration](/deployment/build) for optimization tips
+- Set up continuous deployment with Git integration
+- Configure monitoring and analytics
+- Implement A/B testing (platform-specific features)

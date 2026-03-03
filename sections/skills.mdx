@@ -1,0 +1,215 @@
+---
+title: Skills Section
+description: Interactive skills display with tag-based layout
+---
+
+The Skills section showcases technical abilities, tools, and platforms using an interactive tag-based interface.
+
+## Overview
+
+This section displays:
+- Section heading with icon
+- Grid of skill tags
+- Hover interactions for visual feedback
+
+## File Location
+
+```
+src/sections/skills.astro
+```
+
+## Structure
+
+The skills section uses a simple tag-based layout:
+
+```astro
+<section id="habilidades" class="history skills">
+    <h2 class="heading">
+        <svg><!-- Skills icon --></svg>
+        Mis habilidades
+    </h2>
+
+    <div class="tags">
+        <span class="tag">HTML</span>
+        <span class="tag">CSS</span>
+        <span class="tag">Javascript</span>
+        <!-- More tags... -->
+    </div>
+</section>
+```
+
+## Skill Categories
+
+The section displays skills across multiple categories:
+
+### Development & Programming
+```
+HTML, CSS, Javascript, PHP, MySQL, Node.js, Astro.js, Git
+```
+
+### Content Management
+```
+Wordpress, WooCommerce
+```
+
+### AI & Creative Tools
+```
+Midjourney, Claude MCP
+```
+
+### Analytics & Data
+```
+Looker Studio, Power BI, Google Analytics
+```
+
+### Design & Collaboration
+```
+Miro, Adobe Suite, Figma
+```
+
+### Automation
+```
+n8n
+```
+
+### Project Management
+```
+Kanban/Scrum, Asana, Notion
+```
+
+### CRM Platforms
+```
+Salesforce, Eloqua, Masterbase
+```
+
+## Tag Implementation
+
+Each skill is represented as a clickable tag:
+
+```astro
+<span class="tag">HTML</span>
+<span class="tag">CSS</span>
+<span class="tag">Javascript</span>
+<span class="tag">PHP</span>
+<span class="tag">MySQL</span>
+<span class="tag">Node.js</span>
+<span class="tag">Astro.js</span>
+<span class="tag">Git</span>
+<span class="tag">Wordpress</span>
+<span class="tag">WooCommerce</span>
+<span class="tag">Midjourney</span>
+<span class="tag">Claude MCP</span>
+<span class="tag">Looker Studio</span>
+<span class="tag">Miro</span>
+<span class="tag">Power BI</span>
+<span class="tag">Google Analytics</span>
+<span class="tag">Adobe Suite</span>
+<span class="tag">Figma</span>
+<span class="tag">n8n</span>
+<span class="tag">Kanban/Scrum</span>
+<span class="tag">Salesforce</span>
+<span class="tag">Eloqua</span>
+<span class="tag">Masterbase</span>
+<span class="tag">Asana</span>
+<span class="tag">Notion</span>
+```
+
+## Styling
+
+### Tag Container
+
+The `.tags` container uses flexbox for responsive wrapping:
+
+```css
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+```
+
+### Individual Tags
+
+Each tag has a clean, modern design with smooth interactions:
+
+```css
+.tag {
+    display: inline-block;
+    background-color: var(--color-light);
+    color: var(--color-dark);
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    font-size: var(--font-size-small);
+    font-weight: 500;
+    border: 1px solid transparent;
+    transition: transform 0.2s ease, background-color 0.2s ease, 
+                color 0.2s ease, border-color 0.2s ease, 
+                box-shadow 0.2s ease;
+}
+```
+
+### Hover Effects
+
+Tags transform when hovered to provide visual feedback:
+
+```css
+.tag:hover {
+    transform: scale(1.05);
+    background-color: var(--color-primary);
+    color: var(--color-light);
+    border-color: var(--color-primary-dark);
+    box-shadow: 0 2px 8px rgba(173, 0, 0, 0.25);
+}
+```
+
+**Hover effects include**:
+- 5% scale increase
+- Background color changes to primary color
+- Text color inverts to light
+- Border appears with darker primary shade
+- Drop shadow for depth
+
+### Active State
+
+When clicked, tags have a subtle scale-down effect:
+
+```css
+.tag:active {
+    transform: scale(0.98);
+}
+```
+
+## Interactive Features
+
+The skills section includes:
+- **Smooth transitions** - All property changes animate over 0.2s
+- **Visual feedback** - Hover and active states provide clear interaction cues
+- **Responsive layout** - Tags wrap naturally on smaller screens
+- **Accessible spacing** - 0.5rem gap prevents crowding
+
+## Adding New Skills
+
+To add a new skill tag:
+
+1. Add a new `<span class="tag">` element inside the `.tags` container
+2. Enter the skill name between the opening and closing tags
+3. The tag will automatically inherit all styles and interactions
+
+Example:
+```astro
+<span class="tag">New Skill</span>
+```
+
+## Accessibility
+
+- Semantic HTML with descriptive class names
+- Section ID for navigation (`id="habilidades"`)
+- Color contrast meets accessibility standards
+- Keyboard navigation supported (tags are focusable)
+
+## Related Sections
+
+- [History Section](/sections/history) - Professional background
+- [Works Section](/sections/works) - Experience applying these skills
+- [Contact Section](/sections/contact) - Get in touch

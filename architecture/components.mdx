@@ -1,0 +1,373 @@
+---
+title: 'Components Architecture'
+description: 'Understanding the reusable component system in CV Staff Web'
+icon: 'cube'
+---
+
+## Overview
+
+Components in CV Staff Web are small, reusable UI elements built with Astro. They follow a component-based architecture that promotes reusability, maintainability, and consistency across the application.
+
+## Component Directory
+
+All components are located in `src/components/`:
+
+```
+src/components/
+├── Badget.astro           # Status badge component
+├── ButtonCta.astro        # Call-to-action button
+├── InfoTable.astro        # Information table display
+├── MarqueeV1.astro        # Scrolling text marquee
+├── SectionCard.astro      # Card container for sections
+└── WelcomeCard.astro      # Hero welcome card with animated title
+```
+
+## Component Patterns
+
+### 1. Badget Component
+
+A simple status indicator badge used in the hero section.
+
+**File**: `src/components/Badget.astro`
+
+```astro
+---
+// TypeScript props interface
+interface Props {
+    text?: string;
+}
+
+const { text = "Disponible para trabajar" } = Astro.props;
+---
+
+<div class="badget">
+    <span class="pulse"></span>
+    {text}
+</div>
+
+<style>
+    /* Component-scoped styles */
+    .badget {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        /* ... */
+    }
+</style>
+```
+
+<Tip>
+  The badge uses a pulsing animation indicator to draw attention to availability status.
+</Tip>
+
+### 2. WelcomeCard Component
+
+The main hero title card with animated text and individual letter animations.
+
+**File**: `src/components/WelcomeCard.astro` (lines 1-79)
+
+```astro
+---
+interface Props {
+    name: string;
+    description: string;
+}
+
+const { name, description } = Astro.props as Props;
+const nameLetters = name.split('');
+---
+
+<h1 class="hero-title">
+    <span class="line-1">
+        <span class="word" data-animate="word">Hola,</span>
+    </span>
+    <span class="line-2">
+        <span class="word" data-animate="word">soy</span>
+        <span class="name" data-animate="name">
+            {nameLetters.map((letter, i) => (
+                <span class="letter" style={`--i: ${i}`}>
+                    {letter === ' ' ? '\u00A0' : letter}
+                </span>
+            ))}
+        </span>
+        <span class="wave" data-animate="wave">👋</span>
+    </span>
+</h1>
+
+<p class="hero-description">
+    {description}
+</p>
+```
+
+**Key Features**:
+- Splits name into individual letters for staggered animation
+- Uses data attributes (`data-animate`) for GSAP animation targeting
+- Includes emoji wave with rotation animation
+- CSS custom properties for animation indices
+
+### 3. MarqueeV1 Component
+
+An infinite scrolling text banner with customizable colors.
+
+**File**: `src/components/MarqueeV1.astro`
+
+```astro
+---
+interface Props {
+    text: string;
+    bgColor?: string;
+    textColor?: string;
+}
+
+const { 
+    text, 
+    bgColor = 'var(--color-primary)', 
+    textColor = 'var(--color-light)' 
+} = Astro.props;
+---
+
+<div class="marquee" style={`background-color: ${bgColor}; color: ${textColor};`}>
+    <div class="marquee-content">
+        {Array(20).fill(text).map((t) => (
+            <span class="marquee-item">{t}</span>
+        ))}
+    </div>
+</div>
+```
+
+**Usage Example** from `src/pages/index.astro:30`:
+
+```astro
+<MarqueeV1 
+    text='Publicista • Desarrollador • Project Manager' 
+    bgColor='#ad0000' 
+    textColor='#fff' 
+/>
+```
+
+<Info>
+  The marquee duplicates text 20 times to ensure seamless infinite scrolling across all screen sizes.
+</Info>
+
+### 4. SectionCard Component
+
+A flexible container card for section content.
+
+**File**: `src/components/SectionCard.astro`
+
+```astro
+---
+interface Props {
+    isPadding?: boolean;
+}
+
+const { isPadding } = Astro.props as Props;
+const padding = isPadding ? 'padding: 1rem;' : '';
+---
+
+<section class="section-card" style={padding}>
+    <div class="content">
+        <slot/>
+    </div>
+</section>
+```
+
+**Key Features**:
+- Uses Astro's `<slot/>` for content projection
+- Optional padding via props
+- Consistent card styling across sections
+
+### 5. ButtonCta Component
+
+Call-to-action button with icon support.
+
+**File**: `src/components/ButtonCta.astro`
+
+```astro
+---
+interface Props {
+    href: string;
+    text: string;
+    icon?: any;
+    target?: string;
+}
+
+const { href, text, icon, target = '_self' } = Astro.props;
+---
+
+<a href={href} class="btn-cta" target={target}>
+    {icon && <Fragment set:html={icon} />}
+    <span>{text}</span>
+</a>
+```
+
+### 6. InfoTable Component
+
+Displays information in a structured table format.
+
+**File**: `src/components/InfoTable.astro`
+
+```astro
+---
+interface Props {
+    data: Array<{ label: string; value: string }>;
+}
+
+const { data } = Astro.props;
+---
+
+<table class="info-table">
+    {data.map(({ label, value }) => (
+        <tr>
+            <td class="label">{label}</td>
+            <td class="value">{value}</td>
+        </tr>
+    ))}
+</table>
+```
+
+## Component Design Principles
+
+### TypeScript Props Interface
+
+All components define a TypeScript `Props` interface for type safety:
+
+```typescript
+interface Props {
+    required: string;      // Required prop
+    optional?: boolean;    // Optional prop with ?
+}
+
+const { required, optional = false } = Astro.props as Props;
+```
+
+### Scoped Styles
+
+Components use Astro's scoped `<style>` blocks:
+
+```astro
+<style>
+    /* These styles only apply to this component */
+    .component-class {
+        /* styles */
+    }
+</style>
+```
+
+<Note>
+  Astro automatically scopes component styles to prevent CSS conflicts. Global styles are defined in `src/layouts/Layout.astro` and `src/styles/`.
+</Note>
+
+### Slot-based Composition
+
+Components use `<slot/>` for flexible content projection:
+
+```astro
+<div class="wrapper">
+    <slot/>  <!-- Content passed between component tags -->
+</div>
+```
+
+**Usage**:
+
+```astro
+<SectionCard>
+    <h2>This content goes in the slot</h2>
+    <p>Any content can be passed here</p>
+</SectionCard>
+```
+
+## Animation Integration
+
+Components use `data-*` attributes to integrate with GSAP animations:
+
+```astro
+<div data-animate="word">Animated Text</div>
+<div data-reveal>Scroll Reveal Section</div>
+```
+
+These attributes are targeted by animation scripts in `src/scripts/animations.js`.
+
+See [Scripts Architecture](/architecture/scripts) for details on animation implementation.
+
+## Component Reusability
+
+<Steps>
+  <Step title="Import the component">
+    ```astro
+    ---
+    import ButtonCta from '../components/ButtonCta.astro';
+    ---
+    ```
+  </Step>
+  
+  <Step title="Use with props">
+    ```astro
+    <ButtonCta 
+        href="#contact" 
+        text="Get in Touch" 
+        target="_blank" 
+    />
+    ```
+  </Step>
+  
+  <Step title="Customize with slots (if supported)">
+    ```astro
+    <SectionCard isPadding={true}>
+        <h2>Custom Content</h2>
+    </SectionCard>
+    ```
+  </Step>
+</Steps>
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="Keep components small and focused">
+    Each component should do one thing well. If a component becomes too complex, split it into smaller components.
+  </Accordion>
+  
+  <Accordion title="Use TypeScript for props">
+    Always define a `Props` interface for type safety and better developer experience.
+  </Accordion>
+  
+  <Accordion title="Provide sensible defaults">
+    Use destructuring with defaults: `const { color = 'red' } = Astro.props;`
+  </Accordion>
+  
+  <Accordion title="Document component usage">
+    Include comments describing props and usage examples, especially for complex components.
+  </Accordion>
+</AccordionGroup>
+
+## Component vs Section
+
+Understand when to create a component vs a section:
+
+| Aspect | Component | Section |
+|--------|-----------|----------|
+| **Purpose** | Reusable UI element | Page-specific content area |
+| **Size** | Small, focused | Large, comprehensive |
+| **Reusability** | Used multiple times | Typically used once |
+| **Location** | `src/components/` | `src/sections/` |
+| **Examples** | Button, Card, Badge | Hero, Footer, Contact |
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Sections Architecture" icon="layer-group" href="/architecture/sections">
+    Learn about page sections and their structure
+  </Card>
+  
+  <Card title="Scripts Architecture" icon="code" href="/architecture/scripts">
+    Understand animation and client-side scripts
+  </Card>
+  
+  <Card title="Component Examples" icon="plus" href="/components/badge">
+    Explore example components in detail
+  </Card>
+  
+  <Card title="Styling Guide" icon="palette" href="/customization/styling">
+    Learn about CSS architecture and theming
+  </Card>
+</CardGroup>

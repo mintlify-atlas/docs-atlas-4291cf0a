@@ -1,0 +1,203 @@
+---
+title: Building for Production
+description: Learn how to build your CV Staff Web application for production deployment
+---
+
+## Overview
+
+CV Staff Web uses Astro's build system to generate optimized static files for production. The build process compiles your source code, optimizes assets, and prepares everything for deployment.
+
+## Build Scripts
+
+The following npm scripts are available in `package.json:5-9`:
+
+```json
+{
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  }
+}
+```
+
+### Available Commands
+
+- **`npm run dev`** - Start the development server with hot reload
+- **`npm run build`** - Build the application for production
+- **`npm run preview`** - Preview the production build locally
+- **`npm run astro`** - Run Astro CLI commands directly
+
+## Building for Production
+
+To create a production build:
+
+```bash
+npm run build
+```
+
+This command:
+1. Compiles TypeScript files
+2. Processes and optimizes all pages
+3. Bundles and minifies JavaScript
+4. Optimizes CSS and removes unused styles
+5. Compresses images and assets
+6. Generates static HTML files
+7. Creates an optimized `dist/` directory
+
+## Build Output
+
+After building, you'll find the production files in the `dist/` directory:
+
+```
+dist/
+├── _astro/          # Optimized JS, CSS, and assets
+├── index.html       # Homepage
+└── [other pages]/   # Additional routes
+```
+
+The `dist` directory is excluded from version control (see `tsconfig.json:4`).
+
+## Environment Variables
+
+Before building for production, ensure you configure your environment variables.
+
+### Required Variables
+
+Create a `.env` file based on `.env.example:1-5`:
+
+```bash
+# Groq API Key for AI chatbot
+PUBLIC_GROQ_API_KEY=your_api_key_here
+```
+
+<Note>
+  Environment variables prefixed with `PUBLIC_` are exposed to the client-side code. Never include sensitive API keys without proper security measures.
+</Note>
+
+### Production Environment Variables
+
+When deploying, set environment variables through your hosting platform's dashboard:
+
+- **Vercel**: Project Settings → Environment Variables
+- **Netlify**: Site Settings → Environment Variables
+- **Cloudflare Pages**: Settings → Environment Variables
+
+## Production Optimizations
+
+### Automatic Optimizations
+
+Astro automatically applies these optimizations during build:
+
+1. **Code Splitting** - JavaScript is split into smaller chunks for faster loading
+2. **Tree Shaking** - Removes unused code from final bundles
+3. **Minification** - Compresses HTML, CSS, and JavaScript
+4. **Asset Optimization** - Images and fonts are optimized for web delivery
+
+### Dependencies
+
+Your production build includes these optimized dependencies (from `package.json:11-16`):
+
+- **Astro** (v5.7.13) - Core framework
+- **GSAP** (v3.14.2) - Animation library
+- **Swiper** (v11.2.6) - Touch slider component
+- **Onest Font** (v5.2.8) - Variable font family
+
+## Preview Production Build
+
+Test your production build locally before deploying:
+
+```bash
+npm run build
+npm run preview
+```
+
+The preview server runs at `http://localhost:4321` by default and serves the built files from the `dist/` directory.
+
+## Build Configuration
+
+The build configuration is defined in `astro.config.mjs:1-5`:
+
+```javascript
+import { defineConfig } from 'astro/config';
+
+export default defineConfig({});
+```
+
+This minimal configuration uses Astro's defaults, which are optimized for static site generation.
+
+### Advanced Configuration Options
+
+You can customize the build by adding options to `astro.config.mjs`:
+
+```javascript
+import { defineConfig } from 'astro/config';
+
+export default defineConfig({
+  site: 'https://your-domain.com',
+  base: '/',
+  outDir: './dist',
+  build: {
+    assets: '_astro',
+    format: 'directory'
+  }
+});
+```
+
+## Build Troubleshooting
+
+### Common Issues
+
+**Build fails with TypeScript errors**
+
+Ensure your TypeScript configuration is correct. The project uses strict mode (see `tsconfig.json:2`):
+
+```bash
+npm run astro check
+```
+
+**Missing environment variables**
+
+Verify that all required environment variables are set before building.
+
+**Out of memory errors**
+
+Increase Node.js memory limit:
+
+```bash
+NODE_OPTIONS="--max-old-space-size=4096" npm run build
+```
+
+## CI/CD Integration
+
+Example GitHub Actions workflow for automated builds:
+
+```yaml
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - run: npm ci
+      - run: npm run build
+      - uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: dist/
+```
+
+## Next Steps
+
+After building your application, you're ready to deploy it to a hosting platform. See the [Hosting](/deployment/hosting) guide for deployment instructions.

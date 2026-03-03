@@ -1,0 +1,500 @@
+---
+title: 'Sections Architecture'
+description: 'Understanding how page sections are structured and organized in CV Staff Web'
+icon: 'layer-group'
+---
+
+## Overview
+
+Sections are large, comprehensive page areas that compose the main content of the website. Unlike small reusable components, sections are typically page-specific and contain complex layouts, data integration, and interactive features.
+
+## Sections Directory
+
+All sections are located in `src/sections/`:
+
+```
+src/sections/
+├── chatbot.astro          # AI chatbot interface (16,779 bytes)
+├── contact.astro          # Contact information and links
+├── footer.astro           # Site footer
+├── hero.astro             # Hero section with photo slider (10,650 bytes)
+├── history.astro          # Professional history timeline
+├── skills.astro           # Skills tags display
+└── works.astro            # Work experience accordion (7,613 bytes)
+```
+
+<Note>
+  Sections are substantially larger than components, often containing their own data management, scripts, and complex interactions.
+</Note>
+
+## Section Breakdown
+
+### 1. Hero Section
+
+The main landing section with animated welcome card and photo slider.
+
+**File**: `src/sections/hero.astro`
+
+**Key Features**:
+- Animated welcome card with name letter animations
+- Photo/video slider using Swiper.js
+- Call-to-action buttons (Download CV, LinkedIn)
+- Video controls with sound toggle
+- Responsive design with mobile optimizations
+
+**Structure**:
+
+```astro
+---
+import Badget from '../components/Badget.astro';
+import WelcomeCard from '../components/WelcomeCard.astro';
+
+const photos = [
+    { type: "image", src: "/profile_01.jpeg", alt: "..." },
+    { type: "video", src: "/assets/videos/photo_video.mp4", alt: "..." },
+    // ...
+];
+---
+
+<section id="inicio" class="hero">
+    <Badget />
+    <WelcomeCard name='Nico Gaitán' description='...' />
+    
+    <div class="photo-slider">
+        <!-- Swiper carousel implementation -->
+    </div>
+    
+    <div class="ctas">
+        <!-- Call-to-action buttons -->
+    </div>
+</section>
+```
+
+**Client-side Script** (`src/sections/hero.astro:248-323`):
+
+```javascript
+import Swiper from 'swiper';
+import { EffectCards, Pagination } from 'swiper/modules';
+
+function initSwiper() {
+    const swiper = new Swiper('#heroSwiper', {
+        modules: [EffectCards, Pagination],
+        effect: 'cards',
+        grabCursor: true,
+        // Configuration...
+    });
+    
+    // Video controls and sound toggle
+}
+```
+
+<Tip>
+  The hero section uses Swiper's Cards effect for a modern, interactive photo carousel experience.
+</Tip>
+
+### 2. Skills Section
+
+Displays professional skills as interactive tags.
+
+**File**: `src/sections/skills.astro`
+
+**Structure**:
+
+```astro
+<section id="habilidades" class="history skills">
+    <h2 class="heading">
+        <svg><!-- Icon --></svg>
+        Mis habilidades
+    </h2>
+    
+    <div class="tags">
+        <span class="tag">HTML</span>
+        <span class="tag">CSS</span>
+        <span class="tag">Javascript</span>
+        <!-- 25+ more skills -->
+    </div>
+</section>
+```
+
+**Animation Integration**:
+- Tags animate in with staggered timing on scroll
+- Handled by `initSkillsReveal()` in `src/scripts/animations.js:198-233`
+
+**Interaction**:
+- Tags scale and change color on hover
+- Smooth transitions for visual feedback
+
+### 3. Works Section
+
+Interactive accordion displaying work experience.
+
+**File**: `src/sections/works.astro`
+
+**Key Features**:
+- Accordion UI for multiple work experiences
+- Each item expands to show detailed description
+- Scroll animations for reveal effects
+- Responsive layout
+
+**Structure**:
+
+```astro
+<section id="experiencia" class="works">
+    <h2 class="heading">
+        <svg><!-- Icon --></svg>
+        Experiencia
+    </h2>
+    
+    <div class="accordion">
+        <div class="accordion-item">
+            <button class="accordion-header">
+                <!-- Job title, company, dates -->
+            </button>
+            <div class="accordion-content">
+                <!-- Job description -->
+            </div>
+        </div>
+        <!-- More accordion items -->
+    </div>
+</section>
+```
+
+**Interactive Accordion Script**:
+
+```javascript
+const headers = document.querySelectorAll('.accordion-header');
+headers.forEach(header => {
+    header.addEventListener('click', () => {
+        const item = header.parentElement;
+        const content = item.querySelector('.accordion-content');
+        
+        // Toggle active state
+        item.classList.toggle('active');
+    });
+});
+```
+
+### 4. History Section
+
+Professional background and timeline.
+
+**File**: `src/sections/history.astro`
+
+**Features**:
+- Professional summary text
+- Timeline or narrative layout
+- Scroll reveal animations
+- Uses `data-reveal` attributes for GSAP
+
+### 5. Contact Section
+
+Contact information and social media links.
+
+**File**: `src/sections/contact.astro`
+
+**Structure**:
+
+```astro
+<section id="contacto" class="contact">
+    <h2 class="heading">
+        <svg><!-- Icon --></svg>
+        Contacto
+    </h2>
+    
+    <p class="subline">¿Trabajamos juntos?</p>
+    
+    <div class="links">
+        <a href="mailto:..." class="link">
+            <svg><!-- Email icon --></svg>
+            Email
+        </a>
+        <a href="https://linkedin.com/..." class="link">
+            <svg><!-- LinkedIn icon --></svg>
+            LinkedIn
+        </a>
+        <!-- More contact links -->
+    </div>
+</section>
+```
+
+**Animation**: Links fade in with stagger from `initContactReveal()` in `src/scripts/animations.js:238-261`
+
+### 6. Chatbot Section
+
+AI-powered chatbot interface for visitor interaction.
+
+**File**: `src/sections/chatbot.astro` (largest section at 16,779 bytes)
+
+**Key Features**:
+- Interactive chat interface
+- Message history display
+- AI integration for responses
+- Loading states and error handling
+- Responsive chat UI
+
+**Structure**:
+
+```astro
+<section id="ai-chat" class="chatbot-section">
+    <h2 class="heading">
+        <svg><!-- Icon --></svg>
+        Pregúntale a mi AI
+    </h2>
+    
+    <p class="subline">Chatea con mi asistente virtual</p>
+    
+    <div class="chat-container">
+        <div class="chat-messages">
+            <!-- Message bubbles -->
+        </div>
+        
+        <form class="chat-input">
+            <input type="text" placeholder="Escribe tu pregunta..." />
+            <button type="submit">Enviar</button>
+        </form>
+    </div>
+</section>
+```
+
+<Info>
+  The chatbot section includes complex state management and API integration for AI responses.
+</Info>
+
+### 7. Footer Section
+
+Site footer with additional links and copyright.
+
+**File**: `src/sections/footer.astro`
+
+**Structure**:
+
+```astro
+<footer class="footer">
+    <div class="footer-content">
+        <p class="copyright">
+            © {new Date().getFullYear()} Nico Gaitán
+        </p>
+        
+        <div class="footer-links">
+            <!-- Social media icons -->
+        </div>
+    </div>
+</footer>
+```
+
+## Section Composition in Pages
+
+Sections are composed together in page files. From `src/pages/index.astro:16-41`:
+
+```astro
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../sections/hero.astro';
+import MarqueeV1 from '../components/MarqueeV1.astro';
+import History from '../sections/history.astro';
+import Skills from '../sections/skills.astro';
+import Works from '../sections/works.astro';
+import Chatbot from '../sections/chatbot.astro';
+import Contact from '../sections/contact.astro';
+import Footer from '../sections/footer.astro';
+---
+
+<Layout>
+    <nav class="nav">
+        <!-- Navigation links -->
+    </nav>
+    
+    <div id="main" class="container">
+        <Hero />
+    </div>
+    
+    <MarqueeV1 text='Publicista • Desarrollador • Project Manager' />
+    
+    <div class="container container--sections">
+        <History />
+        <Skills />
+        <Works />
+        <Chatbot />
+        <Contact />
+    </div>
+    
+    <Footer />
+</Layout>
+```
+
+## Section Design Patterns
+
+### 1. Consistent Section Structure
+
+All sections follow a similar structure:
+
+```astro
+<section id="section-id" class="section-name">
+    <h2 class="heading">
+        <svg><!-- Icon --></svg>
+        Section Title
+    </h2>
+    
+    <!-- Section content -->
+</section>
+```
+
+### 2. ID Attributes for Navigation
+
+Sections use `id` attributes for anchor link navigation:
+
+```astro
+<section id="habilidades">
+```
+
+Navigated from:
+
+```astro
+<a href="#habilidades">Habilidades</a>
+```
+
+### 3. Animation Hooks
+
+Sections use `data-*` attributes for scroll animations:
+
+```astro
+<section data-reveal>
+    <div data-reveal-inner>
+        <!-- Animated children -->
+    </div>
+</section>
+```
+
+### 4. Scoped Scripts
+
+Complex sections include their own `<script>` blocks:
+
+```astro
+<section>
+    <!-- Section markup -->
+</section>
+
+<script>
+    // Section-specific client-side code
+    function initFeature() {
+        // Implementation
+    }
+    
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initFeature);
+    } else {
+        initFeature();
+    }
+</script>
+```
+
+## Animation Integration
+
+Sections are deeply integrated with GSAP animations:
+
+<Steps>
+  <Step title="Section uses data attributes">
+    ```astro
+    <section class="works" data-reveal>
+    ```
+  </Step>
+  
+  <Step title="GSAP targets these attributes">
+    ```javascript
+    // src/scripts/animations.js
+    gsap.from('.works .heading', {
+        opacity: 0,
+        y: 40,
+        scrollTrigger: {
+            trigger: '.works',
+            start: 'top 80%'
+        }
+    });
+    ```
+  </Step>
+  
+  <Step title="Section animates on scroll">
+    Elements fade in and slide up when scrolled into view
+  </Step>
+</Steps>
+
+See [Scripts Architecture](/architecture/scripts) for complete animation details.
+
+## Responsive Design
+
+Sections implement mobile-first responsive design:
+
+```css
+/* Mobile first */
+.section {
+    padding: 2rem 1rem;
+}
+
+/* Tablet and up */
+@media (min-width: 640px) {
+    .section {
+        padding: 3rem 1.5rem;
+    }
+}
+
+/* Desktop */
+@media (min-width: 900px) {
+    .section {
+        padding: 4rem 2rem;
+    }
+}
+```
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="Use semantic HTML">
+    Wrap section content in `<section>` tags with meaningful `id` attributes for accessibility and navigation.
+  </Accordion>
+  
+  <Accordion title="Keep sections self-contained">
+    Each section should manage its own data, styles, and scripts without depending on other sections.
+  </Accordion>
+  
+  <Accordion title="Provide animation hooks">
+    Add `data-reveal` or similar attributes to enable scroll animations consistently across sections.
+  </Accordion>
+  
+  <Accordion title="Include headings with icons">
+    Use the consistent heading pattern with SVG icons for visual consistency.
+  </Accordion>
+  
+  <Accordion title="Consider loading performance">
+    Large sections like chatbot should lazy-load or defer non-critical resources.
+  </Accordion>
+</AccordionGroup>
+
+## Section vs Component Decision Matrix
+
+| Use a Section when... | Use a Component when... |
+|----------------------|-------------------------|
+| Content is page-specific | Element is reused multiple times |
+| Contains complex interactions | Has simple, focused functionality |
+| Manages significant state | Is mostly presentational |
+| Is a major page area | Is a small UI element |
+| Has unique data requirements | Can work with props alone |
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Scripts Architecture" icon="code" href="/architecture/scripts">
+    Learn about animations and client-side JavaScript
+  </Card>
+  
+  <Card title="Components Architecture" icon="cube" href="/architecture/components">
+    Understand reusable UI components
+  </Card>
+  
+  <Card title="Section Examples" icon="plus" href="/sections/hero">
+    Explore detailed section implementations
+  </Card>
+  
+  <Card title="Animations Guide" icon="wand-magic-sparkles" href="/features/animations">
+    Deep dive into GSAP scroll animations
+  </Card>
+</CardGroup>

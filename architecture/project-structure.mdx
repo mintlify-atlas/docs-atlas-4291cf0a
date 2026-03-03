@@ -1,0 +1,230 @@
+---
+title: 'Project Structure'
+description: 'Complete overview of the CV Staff Web directory structure and organization'
+icon: 'folder-tree'
+---
+
+## Overview
+
+CV Staff Web follows a standard Astro project structure with clear separation between public assets, source code, and configuration files. The project is organized to maximize maintainability and developer experience.
+
+## Root Directory Structure
+
+```
+cv-staff-web/
+├── .git/                    # Git repository
+├── .vscode/                 # VS Code workspace settings
+├── node_modules/            # NPM dependencies
+├── public/                  # Static assets (served as-is)
+├── src/                     # Source code (processed by Astro)
+├── .env.example             # Environment variables template
+├── .gitignore              # Git ignore rules
+├── astro.config.mjs        # Astro configuration
+├── package.json            # NPM package configuration
+├── package-lock.json       # NPM lock file
+├── README.md               # Project documentation
+└── tsconfig.json           # TypeScript configuration
+```
+
+## Public Directory
+
+The `public/` directory contains static assets that are served directly without processing.
+
+```
+public/
+├── assets/
+│   ├── images/             # Static images
+│   └── videos/             # Video files
+├── favicon.svg             # Site favicon
+└── profile_01.jpeg         # Main profile photo
+```
+
+<Note>
+  Files in the `public/` directory are served at the root URL path. For example, `public/favicon.svg` is accessible at `/favicon.svg`.
+</Note>
+
+## Source Directory
+
+The `src/` directory contains all processed source code organized by function:
+
+```
+src/
+├── assets/                 # Build-time processed assets
+├── components/             # Reusable UI components
+├── data/                   # JSON data files
+├── layouts/                # Page layout templates
+├── pages/                  # Route pages
+├── scripts/                # Client-side JavaScript
+├── sections/               # Page sections
+└── styles/                 # Global CSS
+```
+
+### Assets Directory
+
+Contains SVG files and other assets that are processed during the build:
+
+```
+src/assets/
+├── astro.svg              # Astro logo
+└── background.svg         # Background graphics
+```
+
+### Data Directory
+
+Stores JSON data files used throughout the application:
+
+```
+src/data/
+├── herosliders.json       # Hero section slider configuration
+└── nico-profile.json      # Profile information and metadata
+```
+
+<Tip>
+  Centralizing data in JSON files makes content updates easier and separates data from presentation logic.
+</Tip>
+
+### Layouts Directory
+
+Contains base layout templates that wrap page content:
+
+```
+src/layouts/
+└── Layout.astro           # Main layout with HTML structure
+```
+
+The `Layout.astro` file provides:
+- HTML document structure
+- Meta tags and SEO configuration
+- Global CSS imports
+- Font loading
+- Script initialization
+- Accessibility features (skip links)
+
+### Pages Directory
+
+Contains route files that define the site's pages:
+
+```
+src/pages/
+└── index.astro            # Homepage (/) route
+```
+
+<Info>
+  Astro uses file-based routing. Each `.astro` file in `pages/` becomes a route. The `index.astro` file maps to the root `/` route.
+</Info>
+
+### Styles Directory
+
+Global CSS files for baseline styles:
+
+```
+src/styles/
+├── reset.css              # CSS reset for browser consistency
+└── styles.css             # Global styles and utilities
+```
+
+## Configuration Files
+
+### astro.config.mjs
+
+Configures Astro build settings and integrations:
+
+```javascript
+import { defineConfig } from 'astro/config';
+
+export default defineConfig({});
+```
+
+### package.json
+
+Defines project dependencies and scripts:
+
+```json
+{
+  "name": "",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@fontsource-variable/onest": "^5.2.8",
+    "astro": "^5.7.13",
+    "gsap": "^3.14.2",
+    "swiper": "^11.2.6"
+  }
+}
+```
+
+### tsconfig.json
+
+TypeScript configuration for type checking:
+
+```json
+{
+  "extends": "astro/tsconfigs/base"
+}
+```
+
+## Key Dependencies
+
+<CardGroup cols={2}>
+  <Card title="Astro" icon="rocket">
+    Static site generator and web framework - v5.7.13
+  </Card>
+  
+  <Card title="GSAP" icon="wand-magic-sparkles">
+    Animation library for scroll-triggered effects - v3.14.2
+  </Card>
+  
+  <Card title="Swiper" icon="images">
+    Touch slider for photo carousel - v11.2.6
+  </Card>
+  
+  <Card title="Onest Font" icon="font">
+    Variable font for typography - v5.2.8
+  </Card>
+</CardGroup>
+
+## File Organization Best Practices
+
+<AccordionGroup>
+  <Accordion title="When to use public/ vs src/assets/">
+    - **public/**: Use for large static files, favicons, robots.txt, or files that need specific URLs
+    - **src/assets/**: Use for images and assets that should be optimized during build
+  </Accordion>
+  
+  <Accordion title="Component vs Section organization">
+    - **components/**: Small, reusable UI elements (buttons, cards, badges)
+    - **sections/**: Large, page-specific sections (hero, footer, contact)
+  </Accordion>
+  
+  <Accordion title="Script organization">
+    - Each major feature gets its own file in `src/scripts/`
+    - Generic utilities go in `app.js`
+    - Feature-specific scripts (animations, cursor, color transitions) are separate modules
+  </Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Components Architecture" icon="cube" href="/architecture/components">
+    Learn about the reusable component system
+  </Card>
+  
+  <Card title="Sections Architecture" icon="layer-group" href="/architecture/sections">
+    Explore how page sections are structured
+  </Card>
+  
+  <Card title="Scripts Architecture" icon="code" href="/architecture/scripts">
+    Understand client-side JavaScript organization
+  </Card>
+  
+  <Card title="Quick Start Guide" icon="hammer" href="/quickstart">
+    Set up your development environment
+  </Card>
+</CardGroup>

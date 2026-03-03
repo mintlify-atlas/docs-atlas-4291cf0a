@@ -1,0 +1,144 @@
+---
+title: 'Hero Sliders Schema'
+description: 'JSON schema for hero slider carousel data structure'
+---
+
+The hero sliders schema defines the structure for carousel slides displayed in hero sections, supporting responsive images and call-to-action elements.
+
+## Schema Overview
+
+The hero sliders data is structured as an array of slide objects, each containing image sources, text content, and optional CTA configuration.
+
+## Slide Object Fields
+
+<ResponseField name="id" type="number" required>
+  Unique identifier for the slide
+  
+  Example: `1`
+</ResponseField>
+
+<ResponseField name="srcDesktop" type="string" required>
+  URL or path to the desktop version of the hero image (recommended: 1920x1080)
+  
+  Example: `"https://picsum.photos/id/1/1920/1080"`
+</ResponseField>
+
+<ResponseField name="srcMobile" type="string" required>
+  URL or path to the mobile version of the hero image (recommended: 1080x1920)
+  
+  Example: `"https://picsum.photos/id/1/1080/1920"`
+</ResponseField>
+
+<ResponseField name="alt" type="string" required>
+  Alternative text for the image (accessibility and SEO)
+  
+  Example: `"BoillerPlate"`
+</ResponseField>
+
+<ResponseField name="overline" type="string">
+  Small text displayed above the main headline (typically for category or context)
+  
+  Example: `"Astro Project Boillerplate"`
+</ResponseField>
+
+<ResponseField name="headline" type="string" required>
+  Main headline or title text for the slide
+  
+  Example: `"BoillerPlate V1"`
+</ResponseField>
+
+<ResponseField name="byline" type="string">
+  Descriptive text or subtitle displayed below the headline
+  
+  Example: `"A simple and clean boilerplate for Astro"`
+</ResponseField>
+
+<ResponseField name="ctaLabel" type="string">
+  Label text for the call-to-action button
+  
+  Example: `"Call to action"`
+</ResponseField>
+
+<ResponseField name="ctaLink" type="string">
+  URL or anchor link for the call-to-action button
+  
+  Example: `"#"` or `"/contact"`
+</ResponseField>
+
+## Usage Notes
+
+### Image Specifications
+
+- **Desktop images**: Recommended aspect ratio 16:9 (e.g., 1920x1080)
+- **Mobile images**: Recommended aspect ratio 9:16 (e.g., 1080x1920)
+- Images should be optimized for web performance
+- Support for external URLs and local paths
+
+### Text Content
+
+The text hierarchy for each slide:
+
+1. **Overline** - Optional contextual text
+2. **Headline** - Main title (required)
+3. **Byline** - Supporting description
+4. **CTA** - Call-to-action button
+
+### Call-to-Action
+
+Both `ctaLabel` and `ctaLink` should be provided together. If you want to hide the CTA button, omit both fields or set them to empty strings.
+
+## Example JSON
+
+### Single Slide
+
+```json
+{
+  "id": 1,
+  "srcDesktop": "https://picsum.photos/id/1/1920/1080",
+  "srcMobile": "https://picsum.photos/id/1/1080/1920",
+  "alt": "BoillerPlate",
+  "overline": "Astro Project Boillerplate",
+  "headline": "BoillerPlate V1",
+  "byline": "A simple and clean boilerplate for Astro",
+  "ctaLabel": "Call to action",
+  "ctaLink": "#"
+}
+```
+
+### Complete Array
+
+```json
+[
+  {
+    "id": 1,
+    "srcDesktop": "https://picsum.photos/id/1/1920/1080",
+    "srcMobile": "https://picsum.photos/id/1/1080/1920",
+    "alt": "BoillerPlate",
+    "overline": "Astro Project Boillerplate",
+    "headline": "BoillerPlate V1",
+    "byline": "A simple and clean boilerplate for Astro",
+    "ctaLabel": "Call to action",
+    "ctaLink": "#"
+  },
+  {
+    "id": 2,
+    "srcDesktop": "https://picsum.photos/id/2/1920/1080",
+    "srcMobile": "https://picsum.photos/id/2/1080/1920",
+    "alt": "BoillerPlate",
+    "overline": "Astro Project Boillerplate",
+    "headline": "BoillerPlate V2",
+    "byline": "A simple and clean boilerplate for Astro",
+    "ctaLabel": "Call to action",
+    "ctaLink": "#"
+  }
+]
+```
+
+## Implementation
+
+This schema is used by the hero slider component to render responsive carousel slides. The component automatically:
+
+- Switches between desktop and mobile images based on viewport
+- Displays text content with proper hierarchy
+- Renders CTA buttons when provided
+- Handles slide navigation and transitions

@@ -1,0 +1,79 @@
+---
+title: Button CTA
+description: Call-to-action button with icon and link
+---
+
+The `ButtonCta.astro` component renders a styled anchor tag with an email icon and custom label. It's designed to be used as a call-to-action button for contact links.
+
+## Props
+
+<ParamField path="link" type="string" required>
+  The URL or link destination for the button
+</ParamField>
+
+<ParamField path="label" type="string" required>
+  The text label displayed on the button
+</ParamField>
+
+## Usage
+
+Import and use the ButtonCta component with the required props:
+
+```astro
+---
+import ButtonCta from '../components/ButtonCta.astro';
+---
+
+<ButtonCta 
+    link="mailto:nicolas@inadaptado.cl" 
+    label="Contáctame" 
+/>
+```
+
+## Example
+
+Create a contact button:
+
+```astro
+---
+import ButtonCta from '../components/ButtonCta.astro';
+---
+
+<section class="contact">
+    <h2>Get in touch</h2>
+    <ButtonCta 
+        link="mailto:your-email@example.com" 
+        label="Send Email" 
+    />
+</section>
+```
+
+## Features
+
+- **Icon**: Includes a built-in email envelope icon (SVG)
+- **Styling**: Uses primary brand color background with light text
+- **Alignment**: Aligns to flex-start by default
+- **Spacing**: Gap between icon and label for clean layout
+
+## Styling Details
+
+The component includes:
+
+- **Background**: `var(--color-primary)`
+- **Text color**: `var(--color-light)`
+- **Border radius**: `var(--border-radius)`
+- **Padding**: 0.5rem 1rem
+- **Icon size**: 1.5rem × 1.5rem
+- **Font weight**: 300 for light appearance
+
+## Customization
+
+While the component currently uses a fixed email icon, you could enhance it to accept different icon types:
+
+```astro
+interface Props {
+    link: string;
+    label: string;
+    iconType?: 'email' | 'phone' | 'web';
+}
+```

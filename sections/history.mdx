@@ -1,0 +1,158 @@
+---
+title: History Section
+description: Professional background and biography section
+---
+
+The History section presents the professional background, experience, and expertise of the CV owner in a narrative format.
+
+## Overview
+
+This section provides:
+- Section heading with icon
+- Introduction tagline
+- Multiple paragraphs detailing professional journey
+- Highlighted keywords and statistics
+
+## File Location
+
+```
+src/sections/history.astro
+```
+
+## Structure
+
+The history section follows a simple, content-focused layout:
+
+```astro
+<section id="historia" class="history" data-reveal>
+    <h2 class="heading">
+        <svg><!-- User icon --></svg>
+        Mi historia
+    </h2>
+
+    <p class="intro">
+        Nací para ver, hacer y perseguir la mejor creatividad, actualmente lo hago en <strong>VML Chile</strong>.
+    </p>
+
+    <p><!-- Professional summary paragraph --></p>
+    <p><!-- Experience and roles paragraph --></p>
+    <p><!-- Technical skills and achievements paragraph --></p>
+</section>
+```
+
+## Content Sections
+
+### 1. Introduction
+
+A bold opening statement using the `.intro` class for emphasis:
+
+```astro
+<p class="intro">
+    Nací para ver, hacer y perseguir la mejor creatividad, actualmente lo hago en <strong>VML Chile</strong>.
+</p>
+```
+
+**Styling**: Larger font size (1.15rem), medium weight, and bottom margin for visual separation.
+
+### 2. Professional Summary
+
+Describes the professional identity and approach:
+
+```
+Publicista creativo apasionado por la tecnología y la innovación, con una sólida experiencia 
+en Producción Digital, Desarrollo Web y Gestión de Proyectos...
+```
+
+### 3. Roles and Experience
+
+Highlights diverse roles and leadership experience:
+
+```
+A lo largo de los años he podido desempeñar roles tales como: Project Manager Digital, 
+Chief Digital Officer, Frontend Developer, Content Manager y Productor Web...
+```
+
+### 4. Technical Expertise
+
+Provides specific details about:
+- Years of experience (highlighted with `<strong>`)
+- Team management capabilities
+- CRM platforms (SalesForce, Selligent, Eloqua, MasterBase)
+- CMS expertise (WordPress)
+- Full-stack development skills
+- Automation tools (n8n, WPP Open)
+- Industry verticals served
+
+```astro
+<p>
+    Con más de <strong>7 años de experiencia</strong> en agencias, tengo un vasto conocimiento...
+</p>
+```
+
+## Styling Features
+
+### Typography Hierarchy
+
+```css
+.intro {
+    font-size: 1.15rem;
+    font-weight: 500;
+    color: var(--color-dark);
+    line-height: 1.4;
+    margin-bottom: 1.5rem;
+}
+
+p {
+    font-size: 0.95rem;
+    color: var(--color-dark-grey);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+}
+```
+
+### Emphasis
+
+Important keywords are wrapped in `<strong>` tags with custom styling:
+
+```css
+p strong {
+    color: var(--color-primary);
+    font-weight: 600;
+}
+```
+
+This creates visual emphasis on key information like:
+- Company names (e.g., "VML Chile")
+- Statistics (e.g., "7 años de experiencia")
+
+## Data-Reveal Attribute
+
+The section uses `data-reveal` for scroll-based animations:
+
+```astro
+<section id="historia" class="history" data-reveal>
+```
+
+This likely integrates with an Intersection Observer or scroll animation library to reveal content as users scroll.
+
+## Accessibility
+
+- Semantic HTML structure with proper heading hierarchy
+- Section ID for navigation anchoring (`id="historia"`)
+- Clear visual hierarchy with intro paragraph
+- Readable line height (1.6) for body text
+
+## Customization
+
+To update the content:
+
+1. **Edit the intro**: Modify the `.intro` paragraph for the opening statement
+2. **Update biography**: Change the paragraph content to reflect the professional's background
+3. **Highlight keywords**: Wrap important terms in `<strong>` tags
+4. **Adjust styling**: Modify CSS custom properties for colors and spacing
+
+## Related Sections
+
+- [Skills Section](/sections/skills) - Technical skills and tools
+- [Works Section](/sections/works) - Professional experience timeline
+- [Hero Section](/sections/hero) - Introduction and welcome

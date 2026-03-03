@@ -1,0 +1,139 @@
+---
+title: Marquee
+description: Scrolling text banner with customizable colors
+---
+
+The `MarqueeV1.astro` component creates a horizontally scrolling text banner with smooth animation. It's perfect for displaying key messages, taglines, or highlights across the page.
+
+## Props
+
+<ParamField path="text" type="string" required>
+  The text content to display in the scrolling marquee. The text will be repeated multiple times to create a continuous scrolling effect.
+</ParamField>
+
+<ParamField path="bgColor" type="string" default="#ffffff">
+  The background color of the marquee bar. Accepts any valid CSS color value (hex, rgb, named colors).
+</ParamField>
+
+<ParamField path="textColor" type="string">
+  The text color for the marquee content. Note: Currently defined in the interface but not actively used in the styles.
+</ParamField>
+
+## Usage
+
+Import and use the MarqueeV1 component with your desired text:
+
+```astro
+---
+import MarqueeV1 from '../components/MarqueeV1.astro';
+---
+
+<MarqueeV1 
+    text='Publicista • Desarrollador • Project Manager' 
+    bgColor='#ad0000' 
+    textColor='#fff' 
+/>
+```
+
+## Example
+
+From the CV Staff Web homepage:
+
+```astro src/pages/index.astro
+---
+import MarqueeV1 from '../components/MarqueeV1.astro';
+---
+
+<Layout>
+    <nav class="nav">
+        <!-- Navigation links -->
+    </nav>
+
+    <div id="main" class="container">
+        <Hero />
+    </div>
+
+    <MarqueeV1 
+        text='Publicista • Desarrollador • Project Manager' 
+        bgColor='#ad0000' 
+        textColor='#fff' 
+    />
+
+    <div class="container container--sections">
+        <!-- Other sections -->
+    </div>
+</Layout>
+```
+
+## Features
+
+### Automatic Scrolling
+
+The component uses JavaScript to create a smooth, infinite scrolling effect:
+
+- Clones the text content 14 times to ensure seamless looping
+- Scrolls at 1px per 20ms interval (configurable)
+- Automatically resets when reaching the width of one text element
+
+### Visual Effects
+
+- **Gradient fade**: Both left and right edges have a 50px gradient fade to create a smooth appearance
+- **Text formatting**: Bold, uppercase text at 2rem size
+- **Bullet separator**: Automatically prepends a bullet (•) to the text
+
+### Responsive Design
+
+- Full width container with `max-width: 100vw`
+- Overflow hidden to prevent horizontal scrolling of the page
+- White-space: nowrap to keep text on a single line
+
+## Styling Details
+
+```css
+.marquee-bar {
+    background: var(--color-primary);
+    padding: 1rem 0;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.text {
+    font-size: 2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: var(--color-light);
+}
+```
+
+## Customization
+
+### Adjust Scroll Speed
+
+Modify the speed parameter in the script:
+
+```javascript
+marqueeEffect(".marquee-bar .wrapper", 2); // Increase for faster scrolling
+```
+
+### Change Text Style
+
+Customize the text appearance by modifying the `.text` class styles.
+
+### Background Patterns
+
+The component includes a background-size property that can be used for patterns:
+
+```css
+background-size: 10px 100%;
+background-repeat: no-repeat;
+```
+
+## Browser Compatibility
+
+The component uses standard JavaScript and CSS features that are widely supported. The gradient effects use `linear-gradient` which is supported in all modern browsers.
+
+## Performance Notes
+
+- Uses `setInterval` for animation (consider `requestAnimationFrame` for better performance)
+- Clones content 14 times, which may impact performance with very long text
+- Runs only after DOM is fully loaded

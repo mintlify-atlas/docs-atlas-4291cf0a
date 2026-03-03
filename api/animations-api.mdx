@@ -1,0 +1,263 @@
+---
+title: Animations API
+description: GSAP-based animation utilities for hero, scroll reveals, and section animations
+---
+
+The animations module provides a comprehensive set of GSAP-based animation functions for creating smooth, staggered entrance animations and scroll-triggered reveals throughout the CV Staff Web application.
+
+## Overview
+
+This module automatically initializes animations on page load (unless the user prefers reduced motion) and handles:
+
+- Hero section entrance animations
+- Scroll-triggered section reveals
+- Works accordion animations
+- Skills tag animations
+- Contact section animations
+- Chatbot section animations
+
+## Installation
+
+The animations are automatically initialized when the DOM is ready:
+
+```javascript
+import './scripts/animations.js';
+```
+
+## Functions
+
+### initHeroEntrance()
+
+Animates the hero section with a staggered entrance timeline, including badge, title words, name letters with bounce effect, waving emoji, description, photo slider, and CTAs.
+
+**Location:** `src/scripts/animations.js:9`
+
+**Usage:**
+```javascript
+initHeroEntrance();
+```
+
+**Animated Elements:**
+- `.badget` - Badge with scale and fade-in (0.4s, back.out easing)
+- `[data-animate="word"]` - Title words with slide and rotation (0.5s, stagger 0.1s)
+- `.name .letter` - Name letters falling with bounce (0.6s, stagger 0.04s)
+- `[data-animate="wave"]` - Wave emoji with rotation animation (0.4s + repeat)
+- `.hero-description` - Description fade-in (0.5s)
+- `.photo-slider` or `img` - Photo with scale animation (0.7s)
+- `.ctas` - Call-to-action buttons fade-in (0.5s)
+
+**Timeline:**
+The animation starts with a 0.1s delay and orchestrates all elements in a carefully timed sequence for a polished entrance effect.
+
+---
+
+### initScrollReveal()
+
+Reveals sections with a fade-up animation as they enter the viewport during scroll.
+
+**Location:** `src/scripts/animations.js:134`
+
+**Usage:**
+```javascript
+initScrollReveal();
+```
+
+**Target Elements:**
+All elements with the `[data-reveal]` attribute. The function animates children of `[data-reveal-inner]` if present, otherwise animates direct children.
+
+**Animation Properties:**
+<ParamField path="opacity" type="number" default="0">
+  Initial opacity value
+</ParamField>
+
+<ParamField path="y" type="number" default="50">
+  Initial vertical offset in pixels
+</ParamField>
+
+<ParamField path="duration" type="number" default="0.8">
+  Animation duration in seconds
+</ParamField>
+
+<ParamField path="stagger" type="number" default="0.1">
+  Delay between animating child elements
+</ParamField>
+
+**ScrollTrigger:**
+- Trigger point: `top 80%` (when section is 80% from viewport top)
+- Toggle actions: `play none none none`
+
+---
+
+### initWorksReveal()
+
+Animates the works section heading and accordion items with staggered entrance.
+
+**Location:** `src/scripts/animations.js:157`
+
+**Usage:**
+```javascript
+initWorksReveal();
+```
+
+**Target Elements:**
+- `.works .heading` - Section heading (0.7s, y: 40)
+- `.works .accordion .accordion-item` - Accordion items (0.7s, y: 60, stagger: 0.15s)
+
+**ScrollTrigger:**
+Triggers when `.works` section reaches 80% from viewport top.
+
+---
+
+### initSkillsReveal()
+
+Animates skill tags with scale and stagger effect as they enter the viewport.
+
+**Location:** `src/scripts/animations.js:198`
+
+**Usage:**
+```javascript
+initSkillsReveal();
+```
+
+**Target Elements:**
+- `.skills .heading` - Section heading (opacity: 0, y: 40, 0.7s)
+- `.skills .tags` children - Individual skill tags (opacity: 0, y: 30, scale: 0.8, stagger: 0.04s)
+
+**Animation Properties:**
+- Duration: 0.5s per tag
+- Easing: `back.out(1.2)` for a slight overshoot effect
+- Stagger: 0.04s between tags
+
+**ScrollTrigger:**
+- Heading triggers at `top 80%`
+- Tags trigger at `top 85%`
+
+---
+
+### initContactReveal()
+
+Animates contact section elements (heading, subline, and links) with staggered fade-up.
+
+**Location:** `src/scripts/animations.js:238`
+
+**Usage:**
+```javascript
+initContactReveal();
+```
+
+**Target Elements:**
+- `.contact .heading` - Section heading
+- `.contact .subline` - Subtitle
+- `.contact .links .link` - Individual contact links
+
+**Animation Properties:**
+- Opacity: 0 to 1
+- Y offset: 30px
+- Duration: 0.6s
+- Stagger: 0.1s between elements
+
+---
+
+### initChatbotReveal()
+
+Animates the chatbot section with heading, subline, and chat container entrance.
+
+**Location:** `src/scripts/animations.js:266`
+
+**Usage:**
+```javascript
+initChatbotReveal();
+```
+
+**Target Elements:**
+- `.chatbot-section .heading` - Heading (y: 40, 0.7s)
+- `.chatbot-section .subline` - Subline (y: 30, 0.6s, delay: 0.1s)
+- `.chatbot-section .chat-container` - Chat container (y: 50, scale: 0.95, 0.8s, delay: 0.2s)
+
+**Animation Properties:**
+The chat container uses a `back.out(1.2)` easing for a subtle bounce effect.
+
+---
+
+### init()
+
+Main initialization function that checks for reduced motion preference and initializes all animations.
+
+**Location:** `src/scripts/animations.js:320`
+
+**Usage:**
+```javascript
+init();
+```
+
+**Behavior:**
+- Checks `prefers-reduced-motion` media query
+- Skips all animations if user prefers reduced motion
+- Automatically called on DOMContentLoaded or immediately if DOM is already loaded
+
+**Initialized Functions:**
+1. `initHeroEntrance()`
+2. `initScrollReveal()`
+3. `initWorksReveal()`
+4. `initSkillsReveal()`
+5. `initChatbotReveal()`
+6. `initContactReveal()`
+
+## Dependencies
+
+- **GSAP** (GreenSock Animation Platform)
+- **ScrollTrigger** (GSAP plugin)
+
+```javascript
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
+```
+
+## Accessibility
+
+The module respects user preferences for reduced motion:
+
+```javascript
+if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  return; // Skip all animations
+}
+```
+
+## Example Usage
+
+To add scroll reveal to a custom section:
+
+```html
+<section data-reveal>
+  <div data-reveal-inner>
+    <h2>This heading will animate</h2>
+    <p>This paragraph will animate</p>
+    <button>This button will animate</button>
+  </div>
+</section>
+```
+
+To create animated title words:
+
+```html
+<h1 class="hero-title">
+  <span data-animate="word">Hola,</span>
+  <span data-animate="word">soy</span>
+  <span class="name">
+    <span class="letter">J</span>
+    <span class="letter">u</span>
+    <span class="letter">a</span>
+    <span class="letter">n</span>
+  </span>
+  <span data-animate="wave">👋</span>
+</h1>
+```
+
+## Performance Considerations
+
+- Uses `requestAnimationFrame` for smooth animations
+- ScrollTrigger optimizes scroll performance
+- Animations only play once (`toggleActions: 'play none none none'`)
+- Automatically disabled for users with motion sensitivity

@@ -1,0 +1,246 @@
+---
+title: Environment Variables
+description: Configure API keys and environment settings for CV Staff
+---
+
+## Overview
+
+CV Staff uses environment variables to store sensitive configuration data like API keys. These variables are stored in a `.env` file in the root of your project and should never be committed to version control.
+
+## Setup
+
+### Step 1: Create Environment File
+
+CV Staff includes a `.env.example` file as a template. Copy it to create your own `.env` file:
+
+```bash
+cp .env.example .env
+```
+
+<Warning>
+  The `.env` file contains sensitive information and should be added to `.gitignore`. Never commit API keys or secrets to your repository.
+</Warning>
+
+### Step 2: Configure Variables
+
+Open the `.env` file and add your configuration values.
+
+## Available Variables
+
+### Groq API Key
+
+Used for the AI chatbot functionality.
+
+```bash
+PUBLIC_GROQ_API_KEY=your_api_key_here
+```
+
+**How to obtain:**
+
+1. Visit [Groq Console](https://console.groq.com/keys)
+2. Create an account or sign in
+3. Generate a new API key
+4. Copy the key and paste it in your `.env` file
+
+<Note>
+  The `PUBLIC_` prefix makes this variable available to client-side code in Astro. Be aware that public variables can be seen by users in the browser.
+</Note>
+
+## Using Environment Variables
+
+### In Astro Components
+
+Access environment variables using `import.meta.env`:
+
+```astro
+---
+const apiKey = import.meta.env.PUBLIC_GROQ_API_KEY;
+---
+
+<script>
+  const apiKey = import.meta.env.PUBLIC_GROQ_API_KEY;
+  // Use the API key
+</script>
+```
+
+### In TypeScript/JavaScript Files
+
+```typescript
+const groqApiKey = import.meta.env.PUBLIC_GROQ_API_KEY;
+
+if (!groqApiKey) {
+  console.error('GROQ API key is not configured');
+}
+```
+
+## Environment Variable Naming
+
+Astro supports two types of environment variables:
+
+### Public Variables
+
+Prefix: `PUBLIC_`
+
+- Exposed to the client-side JavaScript
+- Visible in the browser
+- Use for non-sensitive configuration that needs to be accessed from the browser
+
+```bash
+PUBLIC_GROQ_API_KEY=gsk_...
+PUBLIC_SITE_URL=https://yoursite.com
+```
+
+### Private Variables
+
+No prefix required
+
+- Only available on the server-side
+- Never exposed to the browser
+- Use for sensitive data like database passwords
+
+```bash
+DATABASE_URL=postgresql://...
+SECRET_KEY=your_secret_key
+```
+
+<Warning>
+  Since `PUBLIC_GROQ_API_KEY` is public, anyone can see it in your browser's network requests. Consider implementing rate limiting or using server-side API routes for production applications.
+</Warning>
+
+## Validation
+
+It's good practice to validate that required environment variables are set:
+
+```typescript title="src/utils/env.ts"
+function validateEnv() {
+  const required = ['PUBLIC_GROQ_API_KEY'];
+  
+  for (const key of required) {
+    if (!import.meta.env[key]) {
+      throw new Error(`Missing required environment variable: ${key}`);
+    }
+  }
+}
+
+validateEnv();
+```
+
+## Environment-Specific Configuration
+
+You can create different environment files for different environments:
+
+```bash
+.env                 # Default
+.env.local           # Local overrides (gitignored)
+.env.development     # Development
+.env.production      # Production
+```
+
+Astro automatically loads the appropriate file based on the current mode.
+
+## Example Configuration
+
+Here's a complete example of what your `.env` file might look like:
+
+```bash title=".env"
+# AI Chatbot Configuration
+PUBLIC_GROQ_API_KEY=gsk_your_actual_key_here
+
+# Site Configuration
+PUBLIC_SITE_URL=https://yourname.com
+PUBLIC_SITE_NAME=Your Name
+
+# Analytics (if using)
+# PUBLIC_GA_ID=G-XXXXXXXXXX
+
+# Feature Flags
+# PUBLIC_ENABLE_CHATBOT=true
+```
+
+## Security Best Practices
+
+<CardGroup cols={2}>
+  <Card title="Never Commit Secrets" icon="lock">
+    Always add `.env` to your `.gitignore` file to prevent accidental commits.
+  </Card>
+  <Card title="Use .env.example" icon="file-code">
+    Keep `.env.example` updated with all required variables (without actual values).
+  </Card>
+  <Card title="Rotate Keys Regularly" icon="rotate">
+    Change API keys periodically and immediately if they are exposed.
+  </Card>
+  <Card title="Limit Scope" icon="shield-halved">
+    Use API keys with minimal required permissions.
+  </Card>
+</CardGroup>
+
+## Troubleshooting
+
+### Variables Not Loading
+
+**Issue:** Environment variables are undefined
+
+**Solutions:**
+
+1. Ensure the `.env` file is in the project root
+2. Restart the development server after changing `.env`
+3. Check for typos in variable names
+4. Verify the `PUBLIC_` prefix for client-side variables
+
+### API Key Not Working
+
+**Issue:** Groq API returns authentication errors
+
+**Solutions:**
+
+1. Verify the API key is correct and active in the Groq Console
+2. Check for extra spaces or newlines in the `.env` file
+3. Ensure you're using the correct key (test vs. production)
+4. Verify your Groq account has credits/quota available
+
+## Adding New Variables
+
+When adding new environment variables:
+
+1. **Update `.env.example`** with a placeholder:
+   ```bash
+   PUBLIC_NEW_API_KEY=your_api_key_here
+   ```
+
+2. **Add to your `.env`** with the actual value:
+   ```bash
+   PUBLIC_NEW_API_KEY=actual_key_value
+   ```
+
+3. **Document it** in your README or documentation
+
+4. **Add TypeScript types** (optional but recommended):
+   ```typescript title="src/env.d.ts"
+   interface ImportMetaEnv {
+     readonly PUBLIC_GROQ_API_KEY: string;
+     readonly PUBLIC_NEW_API_KEY: string;
+   }
+   ```
+
+## Production Deployment
+
+When deploying to production:
+
+1. **Never deploy the `.env` file** - it should only exist locally
+2. **Use your hosting platform's environment variable settings:**
+   - Vercel: Project Settings → Environment Variables
+   - Netlify: Site Settings → Build & Deploy → Environment
+   - Other platforms: Check their documentation
+
+3. **Set the same variables** you have in `.env` through the platform's UI
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Profile Data" icon="user" href="/customization/profile-data">
+    Customize your professional information and CV content
+  </Card>
+  <Card title="Styling" icon="palette" href="/customization/styling">
+    Customize colors, fonts, and visual appearance
+  </Card>
+</CardGroup>

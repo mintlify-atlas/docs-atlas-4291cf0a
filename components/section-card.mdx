@@ -1,0 +1,180 @@
+---
+title: Section Card
+description: Container component with optional padding
+---
+
+The `SectionCard.astro` component is a flexible container that wraps content in a styled card with optional padding. It's designed to create consistent section layouts across your application.
+
+## Props
+
+<ParamField path="isPadding" type="boolean" default="false">
+  When `true`, adds 1rem padding to the section card. When `false` or omitted, no padding is applied.
+</ParamField>
+
+## Usage
+
+Import and use the SectionCard component with slot content:
+
+```astro
+---
+import SectionCard from '../components/SectionCard.astro';
+---
+
+<SectionCard isPadding={true}>
+    <h2>Section Title</h2>
+    <p>Your content goes here</p>
+</SectionCard>
+```
+
+## Examples
+
+### With Padding
+
+```astro
+<SectionCard isPadding={true}>
+    <div class="content">
+        <h3>Featured Content</h3>
+        <p>This section has internal padding for spacing.</p>
+    </div>
+</SectionCard>
+```
+
+### Without Padding
+
+```astro
+<SectionCard>
+    <img src="/banner.jpg" alt="Full-width banner" />
+    <div class="inner-content">
+        <p>Use without padding for full-width content like images.</p>
+    </div>
+</SectionCard>
+```
+
+### Nested Components
+
+```astro
+<SectionCard isPadding={true}>
+    <h2>My Skills</h2>
+    <div class="tags">
+        <span class="tag">JavaScript</span>
+        <span class="tag">Astro</span>
+        <span class="tag">CSS</span>
+    </div>
+</SectionCard>
+```
+
+## Slot Content
+
+The component uses Astro's default slot to accept any content:
+
+```astro
+<section class="section-card" style={padding}>
+    <div class="content">
+        <slot/>
+    </div>
+</section>
+```
+
+This means you can pass any valid Astro/HTML content between the opening and closing tags.
+
+## Styling Details
+
+The component provides:
+
+- **Background**: `var(--color-background)`
+- **Border radius**: 10px
+- **Width**: 100% (full width of container)
+- **Display**: Flexbox layout
+- **Box shadow**: Commented out by default (can be enabled)
+
+### CSS Structure
+
+```css
+.section-card {
+    display: flex;
+    background-color: var(--color-background);
+    border-radius: 10px;
+    overflow: hidden;
+    width: 100%;
+}
+```
+
+## Use Cases
+
+### Content Sections
+
+Wrap different content sections to maintain consistent styling:
+
+```astro
+<SectionCard isPadding={true}>
+    <h2>About Me</h2>
+    <p>Biography content...</p>
+</SectionCard>
+
+<SectionCard isPadding={true}>
+    <h2>Experience</h2>
+    <ul>
+        <li>Job 1</li>
+        <li>Job 2</li>
+    </ul>
+</SectionCard>
+```
+
+### Image Galleries
+
+Use without padding for full-bleed images:
+
+```astro
+<SectionCard>
+    <div class="gallery">
+        <img src="photo1.jpg" />
+        <img src="photo2.jpg" />
+        <img src="photo3.jpg" />
+    </div>
+</SectionCard>
+```
+
+### Mixed Content
+
+Combine with other components:
+
+```astro
+<SectionCard isPadding={true}>
+    <WelcomeCard name="John Doe" description="Developer" />
+    <ButtonCta link="mailto:john@example.com" label="Contact" />
+</SectionCard>
+```
+
+## Customization
+
+You can extend the component to support additional styling options:
+
+```astro
+interface Props {
+    isPadding?: boolean;
+    borderRadius?: string;
+    backgroundColor?: string;
+}
+
+const { 
+    isPadding, 
+    borderRadius = '10px',
+    backgroundColor = 'var(--color-background)'
+} = Astro.props as Props;
+
+const padding = isPadding ? 'padding: 1rem;' : '';
+const styles = `${padding} border-radius: ${borderRadius}; background-color: ${backgroundColor};`;
+```
+
+## Accessibility
+
+The component renders a semantic `<section>` element. Consider adding appropriate ARIA labels or IDs when using it:
+
+```astro
+<SectionCard isPadding={true}>
+    <section aria-labelledby="about-heading">
+        <h2 id="about-heading">About Me</h2>
+        <!-- Content -->
+    </section>
+</SectionCard>
+```

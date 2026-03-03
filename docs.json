@@ -1,122 +1,113 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
-  "name": "Mint Starter Kit",
+  "name": "CV Staff Web",
+  "theme": "palm",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#ad0000",
+    "light": "#ff9595",
+    "dark": "#8a0000"
   },
-  "favicon": "/favicon.svg",
+  "navbar": {
+    "primary": {
+      "type": "github",
+      "href": "https://github.com/ngaitan94/cv-staff-web"
+    }
+  },
+  "footer": {
+    "socials": {
+      "github": "https://github.com/ngaitan94/cv-staff-web"
+    }
+  },
   "navigation": {
     "tabs": [
       {
-        "tab": "Guides",
+        "tab": "Documentation",
         "groups": [
           {
-            "group": "Getting started",
+            "group": "Get Started",
             "pages": [
-              "index",
-              "quickstart",
-              "development"
+              "introduction",
+              "quickstart"
+            ]
+          },
+          {
+            "group": "Architecture",
+            "pages": [
+              "architecture/project-structure",
+              "architecture/components",
+              "architecture/sections",
+              "architecture/scripts"
+            ]
+          },
+          {
+            "group": "Components",
+            "pages": [
+              "components/badge",
+              "components/button-cta",
+              "components/info-table",
+              "components/marquee",
+              "components/section-card",
+              "components/welcome-card"
+            ]
+          },
+          {
+            "group": "Sections",
+            "pages": [
+              "sections/hero",
+              "sections/history",
+              "sections/skills",
+              "sections/works",
+              "sections/chatbot",
+              "sections/contact",
+              "sections/footer"
+            ]
+          },
+          {
+            "group": "Features",
+            "pages": [
+              "features/ai-chatbot",
+              "features/animations",
+              "features/glass-cursor",
+              "features/color-transitions"
             ]
           },
           {
             "group": "Customization",
             "pages": [
-              "essentials/settings",
-              "essentials/navigation"
+              "customization/profile-data",
+              "customization/styling",
+              "customization/environment-variables"
             ]
           },
           {
-            "group": "Writing content",
+            "group": "Deployment",
             "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets"
-            ]
-          },
-          {
-            "group": "AI tools",
-            "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
+              "deployment/build",
+              "deployment/hosting"
             ]
           }
         ]
       },
       {
-        "tab": "API reference",
+        "tab": "API Reference",
         "groups": [
           {
-            "group": "API documentation",
+            "group": "Data Schema",
             "pages": [
-              "api-reference/introduction"
+              "api/profile-schema",
+              "api/hero-sliders"
             ]
           },
           {
-            "group": "Endpoint examples",
+            "group": "Scripts",
             "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
+              "api/animations-api",
+              "api/glass-cursor-api",
+              "api/color-transition-api"
             ]
           }
         ]
       }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
-        }
-      ]
-    }
-  },
-  "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
-  },
-  "navbar": {
-    "links": [
-      {
-        "label": "Support",
-        "href": "mailto:hi@mintlify.com"
-      }
-    ],
-    "primary": {
-      "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
-    }
-  },
-  "contextual": {
-    "options": [
-     "copy",
-     "view",
-     "chatgpt",
-     "claude",
-     "perplexity",
-     "mcp",
-     "cursor",
-     "vscode"
-   ]
-  },
-  "footer": {
-    "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
-    }
+    ]
   }
 }

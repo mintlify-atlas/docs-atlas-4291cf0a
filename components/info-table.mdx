@@ -1,0 +1,100 @@
+---
+title: Info Table
+description: Display information in a table-like structure with icons
+---
+
+The `InfoTable.astro` component provides a structured way to display information with icon headers. Currently, it shows a barcode icon with the text "Andrés Bello".
+
+## Props
+
+This component does not accept any props. The content is currently hardcoded.
+
+## Usage
+
+Import and use the InfoTable component in your Astro pages:
+
+```astro
+---
+import InfoTable from '../components/InfoTable.astro';
+---
+
+<section>
+    <InfoTable />
+</section>
+```
+
+## Current Implementation
+
+The component displays:
+
+- A barcode icon (SVG)
+- The text "Andrés Bello"
+
+```astro
+<div class="info-table">
+    <div class="header">
+        <div class="field">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
+                <!-- Barcode icon paths -->
+            </svg>
+            Andrés Bello
+        </div>
+    </div>
+</div>
+```
+
+## Potential Enhancements
+
+This component appears to be a work in progress. You could enhance it to accept props:
+
+### Enhanced Version Example
+
+```astro
+---
+interface Props {
+    fields: Array<{
+        icon: string;
+        label: string;
+        value: string;
+    }>;
+}
+
+const { fields } = Astro.props as Props;
+---
+
+<div class="info-table">
+    <div class="header">
+        {fields.map(field => (
+            <div class="field">
+                <!-- Icon -->
+                <span class="label">{field.label}:</span>
+                <span class="value">{field.value}</span>
+            </div>
+        ))}
+    </div>
+</div>
+```
+
+### Usage with Enhanced Version
+
+```astro
+<InfoTable 
+    fields={[
+        { icon: 'barcode', label: 'Location', value: 'Andrés Bello' },
+        { icon: 'user', label: 'Name', value: 'John Doe' },
+        { icon: 'email', label: 'Email', value: 'john@example.com' }
+    ]}
+/>
+```
+
+## Styling
+
+The component structure includes:
+
+- `.info-table` - Main container
+- `.header` - Header section
+- `.field` - Individual field container with icon and text
+
+## Note
+
+This component is not currently used in the main application pages and appears to be a template or unused component. Consider enhancing it with props to make it reusable across different contexts.

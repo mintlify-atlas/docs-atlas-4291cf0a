@@ -1,0 +1,356 @@
+---
+title: 'AI Chatbot'
+description: 'Interactive AI chatbot powered by Groq API for answering visitor questions'
+icon: 'message-circle'
+---
+
+## Overview
+
+The AI Chatbot feature provides an interactive conversational interface that uses the Groq API with the LLaMA 3.3 70B model. It answers questions about profile information in a personalized, first-person manner.
+
+## Implementation
+
+The chatbot is implemented in `src/sections/chatbot.astro` and integrates:
+
+- **Groq API**: Uses the `llama-3.3-70b-versatile` model
+- **Profile Data**: Loads from `src/data/nico-profile.json`
+- **Conversation History**: Maintains context across multiple questions
+- **Rate Limiting**: Built-in cooldown mechanism
+
+## Core Components
+
+### Answer Card
+
+Displays AI responses with animated states:
+
+```astro
+<div class="answer-card" id="answer-card">
+    <div class="card-glow"></div>
+    <div class="card-content">
+        <div class="icon-wrapper" id="icon-wrapper">
+            <!-- Dynamic icon based on state -->
+        </div>
+        <p class="answer-text" id="answer-text">
+            Escribe una pregunta sobre mi experiencia...
+        </p>
+    </div>
+</div>
+```
+
+### Quick Questions
+
+Pre-configured question buttons for common inquiries:
+
+```astro
+<div class="quick-questions" id="quick-questions">
+    <button class="q-btn" data-q="¿Cuáles son tus principales fortalezas?">
+        <span class="q-icon">💪</span>
+        <span class="q-text">Fortalezas</span>
+    </button>
+    <!-- More quick question buttons -->
+</div>
+```
+
+### Input Form
+
+Custom text input with submit button:
+
+```astro
+<form class="oracle-input" id="oracle-form">
+    <input 
+        type="text" 
+        id="oracle-input" 
+        placeholder="Escribe tu pregunta aquí..."
+        autocomplete="off"
+    />
+    <button type="submit" id="ask-btn" aria-label="Consultar">
+        <span class="btn-text">Consultar</span>
+        <!-- Search icon SVG -->
+    </button>
+</form>
+```
+
+## API Integration
+
+The chatbot communicates with Groq's OpenAI-compatible API:
+
+```javascript
+const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
+
+const response = await fetch(GROQ_URL, {
+    method: 'POST',
+    headers: {
+        'Authorization': 'Bearer ' + API_KEY,
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        model: 'llama-3.3-70b-versatile',
+        messages: [
+            { role: 'system', content: systemPrompt }
+        ].concat(conversationHistory),
+        max_tokens: 500,
+        temperature: 0.7
+    })
+});
+```
+
+Location: `src/sections/chatbot.astro:156-170`
+
+## System Prompt
+
+The chatbot uses a detailed system prompt to maintain personality and context:
+
+```javascript
+const systemPrompt = 'Eres Nico AI, la versión digital de Nicolás Gaitán. ' +
+    'Tu objetivo es representarlo de manera auténtica...\n\n' +
+    'INFORMACIÓN DE NICO:\n' + JSON.stringify(nicoProfile, null, 2) + '\n\n' +
+    'INSTRUCCIONES:\n' +
+    '- Responde en primera persona como si fueras Nico\n' +
+    '- Sé cercano, entusiasta y profesional\n' +
+    '- Destaca siempre los puntos fuertes...';
+```
+
+Location: `src/sections/chatbot.astro:89`
+
+## State Management
+
+### Loading State
+
+```javascript
+function setLoading(loading) {
+    isLoading = loading;
+    askBtn.disabled = loading;
+    oracleInput.disabled = loading;
+    
+    if (loading) {
+        answerCard.classList.add('loading');
+        iconWrapper.innerHTML = '<div class="spinner"></div>';
+        answerText.textContent = 'Analizando tu consulta...';
+        quickQuestions.style.opacity = '0.3';
+        quickQuestions.style.pointerEvents = 'none';
+    } else {
+        answerCard.classList.remove('loading');
+        answerCard.classList.add('answered');
+        // Update icon to checkmark
+    }
+}
+```
+
+Location: `src/sections/chatbot.astro:110-128`
+
+### Answer Display
+
+```javascript
+function showAnswer(text, isError) {
+    answerText.textContent = text;
+    answerCard.classList.add('revealed');
+    
+    if (isError) {
+        answerCard.classList.add('error');
+        // Show error icon
+    } else {
+        answerCard.classList.remove('error');
+    }
+}
+```
+
+Location: `src/sections/chatbot.astro:130-140`
+
+## Rate Limiting
+
+Built-in cooldown mechanism prevents API abuse:
+
+```javascript
+const COOLDOWN_MS = 2000;
+let lastMessageTime = 0;
+
+function getCooldownRemaining() {
+    const elapsed = Date.now() - lastMessageTime;
+    return Math.max(0, COOLDOWN_MS - elapsed);
+}
+
+// In askQuestion function:
+const cooldown = getCooldownRemaining();
+if (cooldown > 0) {
+    showAnswer('⏳ Espera ' + Math.ceil(cooldown / 1000) + ' segundos...', true);
+    return;
+}
+```
+
+Location: `src/sections/chatbot.astro:94,105-108,145-149`
+
+## Error Handling
+
+Comprehensive error handling for API failures:
+
+```javascript
+try {
+    const response = await fetch(GROQ_URL, {...});
+    
+    if (!response.ok) {
+        if (response.status === 429) {
+            throw new Error('RATE_LIMIT');
+        }
+        // Parse error message from response
+        throw new Error(errorMsg);
+    }
+    
+    const data = await response.json();
+    // Process answer...
+    
+} catch (error) {
+    setLoading(false);
+    
+    if (error.message === 'RATE_LIMIT') {
+        lastMessageTime = Date.now() + 10000;
+        showAnswer('⏳ Demasiadas consultas. Espera 10 segundos.', true);
+    } else {
+        showAnswer('😅 Algo salió mal. Contáctame directamente...', true);
+    }
+    conversationHistory.pop(); // Remove failed question
+}
+```
+
+Location: `src/sections/chatbot.astro:155-208`
+
+## Styling Features
+
+### Animated Card Glow
+
+```css
+.card-glow {
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(135deg, var(--color-primary), #ff6b6b, var(--color-primary));
+    background-size: 200% 200%;
+    border-radius: 1.5rem;
+    opacity: 0;
+    animation: gradientShift 3s ease infinite;
+}
+
+.answer-card.loading .card-glow,
+.answer-card.answered .card-glow {
+    opacity: 1;
+}
+```
+
+Location: `src/sections/chatbot.astro:250-270`
+
+### Spinner Animation
+
+```css
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+```
+
+Location: `src/sections/chatbot.astro:314-325`
+
+## Configuration
+
+### Environment Variables
+
+Set the Groq API key in your `.env` file:
+
+```bash
+PUBLIC_GROQ_API_KEY=your_groq_api_key_here
+```
+
+### Model Parameters
+
+```javascript
+model: 'llama-3.3-70b-versatile',
+max_tokens: 500,        // Maximum response length
+temperature: 0.7        // Response creativity (0-1)
+```
+
+Location: `src/sections/chatbot.astro:164-168`
+
+### Profile Data
+
+Customize responses by editing `src/data/nico-profile.json`:
+
+```json
+{
+    "name": "Nicolás Gaitán",
+    "experience": [...],
+    "skills": [...],
+    "strengths": [...]
+}
+```
+
+## Event Handling
+
+### Form Submission
+
+```javascript
+oracleForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const question = oracleInput.value.trim();
+    if (!question || isLoading) return;
+    
+    oracleInput.value = '';
+    askQuestion(question);
+});
+```
+
+Location: `src/sections/chatbot.astro:211-218`
+
+### Quick Question Clicks
+
+```javascript
+quickBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+        const question = btn.getAttribute('data-q');
+        if (question && !isLoading) {
+            askQuestion(question);
+        }
+    });
+});
+```
+
+Location: `src/sections/chatbot.astro:220-227`
+
+## Accessibility
+
+- Keyboard navigation support
+- ARIA labels on interactive elements
+- Disabled state management
+- Reduced motion preferences respected (via CSS)
+
+## Responsive Design
+
+Mobile optimizations:
+
+```css
+@media (max-width: 640px) {
+    .answer-card {
+        min-height: 220px;
+        padding: 1.5rem;
+    }
+    
+    .oracle-input button .btn-text {
+        display: none;  /* Show only icon on mobile */
+    }
+}
+```
+
+Location: `src/sections/chatbot.astro:470-515`
+
+## Best Practices
+
+1. **API Key Security**: Never commit API keys to version control
+2. **Rate Limiting**: Implement cooldowns to prevent abuse
+3. **Error Handling**: Provide clear error messages to users
+4. **Conversation History**: Maintain context for better responses
+5. **Loading States**: Show clear feedback during API calls
+6. **Fallback Messages**: Always provide contact alternatives if chatbot fails

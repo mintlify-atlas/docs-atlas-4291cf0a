@@ -1,0 +1,279 @@
+---
+title: Glass Cursor API
+description: Custom glass morphism cursor effect with smooth animations and hover states
+---
+
+The glass cursor module creates a custom glassmorphism cursor effect with a dot and outline that follows the mouse with smooth animations. It includes hover states for interactive elements and respects user preferences.
+
+## Overview
+
+The glass cursor provides:
+
+- Custom cursor with dot and outline elements
+- Smooth delayed animation for outline
+- Hover effects for interactive elements
+- Responsive behavior (desktop only)
+- Accessibility support (respects reduced motion preference)
+
+## Installation
+
+The glass cursor is automatically initialized when the DOM is ready:
+
+```javascript
+import { initGlassCursor } from './scripts/glass-cursor.js';
+```
+
+## Functions
+
+### initGlassCursor()
+
+Initializes the glass cursor effect with custom dot and outline elements.
+
+**Location:** `src/scripts/glass-cursor.js:2`
+
+**Usage:**
+```javascript
+initGlassCursor();
+```
+
+**Requirements:**
+
+<ParamField path="window.innerWidth" type="number" required>
+  Minimum width of 1024px (desktop only)
+</ParamField>
+
+<ParamField path="prefers-reduced-motion" type="boolean" default="false">
+  If true, cursor effect is disabled
+</ParamField>
+
+**Behavior:**
+
+The function performs the following steps:
+
+1. **Checks prerequisites:**
+   - Returns early if user prefers reduced motion
+   - Returns early if viewport width < 1024px
+
+2. **Creates cursor elements:**
+   - `.cursor-outline` - Outer ring with glass effect
+   - `.cursor-dot` - Inner dot
+
+3. **Sets up mouse tracking:**
+   - Dot follows mouse instantly
+   - Outline follows with smooth delay
+
+4. **Adds hover effects:**
+   - Adds `.hover` class to interactive elements
+   - Interactive selectors: `a, button, .tag, .accordion-header, .q-btn, input, textarea`
+
+5. **Hides default cursor:**
+   - Sets `cursor: none` on body and all elements
+
+6. **Handles viewport events:**
+   - Fades out cursor when mouse leaves viewport
+   - Fades in cursor when mouse enters viewport
+
+## Animation Details
+
+### Smooth Following Animation
+
+The outline follows the cursor with a smooth delay using linear interpolation:
+
+```javascript
+function animate() {
+    const delay = 0.12;
+    outlineX += (mouseX - outlineX) * delay;
+    outlineY += (mouseY - outlineY) * delay;
+    
+    cursorOutline.style.left = `${outlineX}px`;
+    cursorOutline.style.top = `${outlineY}px`;
+    
+    requestAnimationFrame(animate);
+}
+```
+
+<ParamField path="delay" type="number" default="0.12">
+  Controls the smoothness of the outline following effect. Lower values = slower following.
+</ParamField>
+
+### Cursor Positioning
+
+Both cursor elements use CSS `transform: translate(-50%, -50%)` for perfect centering:
+
+```javascript
+cursorDot.style.left = `${mouseX}px`;
+cursorDot.style.top = `${mouseY}px`;
+```
+
+## Interactive Elements
+
+The following elements receive hover effects:
+
+| Selector | Description |
+|----------|-------------|
+| `a` | Links |
+| `button` | Buttons |
+| `.tag` | Skill tags |
+| `.accordion-header` | Accordion headers |
+| `.q-btn` | Custom buttons |
+| `input` | Input fields |
+| `textarea` | Textarea fields |
+
+### Hover State
+
+When hovering over interactive elements:
+
+```javascript
+el.addEventListener('mouseenter', () => {
+    cursorOutline.classList.add('hover');
+    cursorDot.classList.add('hover');
+});
+
+el.addEventListener('mouseleave', () => {
+    cursorOutline.classList.remove('hover');
+    cursorDot.classList.remove('hover');
+});
+```
+
+## CSS Requirements
+
+The module expects the following CSS classes to be defined:
+
+### .cursor-outline
+
+Outer ring with glass morphism effect:
+
+```css
+.cursor-outline {
+  position: fixed;
+  width: 40px;
+  height: 40px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  backdrop-filter: blur(5px);
+  transition: width 0.2s, height 0.2s, opacity 0.2s;
+}
+
+.cursor-outline.hover {
+  width: 60px;
+  height: 60px;
+}
+```
+
+### .cursor-dot
+
+Inner dot:
+
+```css
+.cursor-dot {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 10000;
+  transform: translate(-50%, -50%);
+  transition: width 0.2s, height 0.2s, opacity 0.2s;
+}
+
+.cursor-dot.hover {
+  width: 12px;
+  height: 12px;
+}
+```
+
+## Example Usage
+
+### Manual Initialization
+
+```javascript
+import { initGlassCursor } from './scripts/glass-cursor.js';
+
+// Initialize manually
+initGlassCursor();
+```
+
+### Add Custom Interactive Elements
+
+To add hover effects to custom elements after initialization:
+
+```javascript
+const customElements = document.querySelectorAll('.custom-interactive');
+const cursorOutline = document.querySelector('.cursor-outline');
+const cursorDot = document.querySelector('.cursor-dot');
+
+customElements.forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursorOutline.classList.add('hover');
+    cursorDot.classList.add('hover');
+  });
+  
+  el.addEventListener('mouseleave', () => {
+    cursorOutline.classList.remove('hover');
+    cursorDot.classList.remove('hover');
+  });
+});
+```
+
+## Accessibility
+
+The cursor effect respects accessibility preferences:
+
+```javascript
+if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    console.log('Glass cursor disabled: reduced motion preference');
+    return;
+}
+```
+
+## Browser Support
+
+**Required Features:**
+- `requestAnimationFrame`
+- CSS `backdrop-filter` for glass effect
+- CSS transforms
+- Media queries
+
+**Desktop Only:**
+The effect only activates on viewports ≥1024px wide:
+
+```javascript
+if (window.innerWidth < 1024) {
+    console.log('Glass cursor disabled: screen width', window.innerWidth);
+    return;
+}
+```
+
+## Debugging
+
+The module includes console logging for initialization:
+
+```javascript
+console.log('Glass cursor initializing...');
+console.log('Cursor elements added:', { outline: cursorOutline, dot: cursorDot });
+```
+
+To debug, check the console for:
+- Initialization confirmation
+- Reduced motion detection
+- Screen width detection
+- Element creation confirmation
+
+## Performance Considerations
+
+- Uses `requestAnimationFrame` for smooth 60fps animation
+- `pointer-events: none` prevents cursor elements from blocking interactions
+- Passive event listener for viewport events (when supported)
+- Minimal DOM manipulation (only position updates)
+
+## Export
+
+The module exports the initialization function:
+
+```javascript
+export { initGlassCursor };
+```

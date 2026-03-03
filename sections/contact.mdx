@@ -1,0 +1,261 @@
+---
+title: Contact Section
+description: Contact information with website, email, and phone links
+---
+
+The Contact section provides multiple ways to get in touch, including website, email, and phone contact options.
+
+## Overview
+
+This section includes:
+- Section heading with chat icon
+- Introductory subheading
+- Three contact links with icons
+- Hover animations for interaction
+
+## File Location
+
+```
+src/sections/contact.astro
+```
+
+## Structure
+
+```astro
+<section id="contacto" class="history contact">
+    <h2 class="heading">
+        <svg><!-- Chat icon --></svg>
+        Hablemos
+    </h2>
+
+    <p class="subline">¿Tienes un proyecto en mente? Conversemos. También puedes revisar mi trabajo en Inadaptado.</p>
+
+    <div class="links">
+        <!-- Contact links -->
+    </div>
+</section>
+```
+
+## Contact Methods
+
+### 1. Website Link
+
+Links to the personal agency website:
+
+```astro
+<a class="link" href="https://inadaptado.cl" target="_blank" rel="noopener noreferrer">
+    <svg><!-- Website icon --></svg>
+    www.inadaptado.cl
+</a>
+```
+
+**Icon**: Mobile/device icon  
+**Target**: Opens in new tab  
+**Security**: `rel="noopener noreferrer"` for security
+
+### 2. Email Link
+
+Direct email contact:
+
+```astro
+<a class="link" href="mailto:nicolas@inadaptado.cl" aria-label="Enviar email a nicolas@inadaptado.cl">
+    <svg><!-- Email icon --></svg>
+    nicolas@inadaptado.cl
+</a>
+```
+
+**Protocol**: `mailto:` opens default email client  
+**Accessibility**: Descriptive `aria-label`
+
+### 3. Phone Link
+
+Clickable phone number:
+
+```astro
+<a class="link" href="tel:+56931165405" aria-label="Llamar al +56 9 3116 5405">
+    <svg><!-- Phone icon --></svg>
+    (+56) 9 3116-5405
+</a>
+```
+
+**Protocol**: `tel:` initiates phone call on mobile  
+**Format**: International format in href, formatted display text
+
+## Styling
+
+### Container Layout
+
+```css
+.contact {
+    padding-bottom: 3rem;
+}
+
+.links {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-small);
+}
+```
+
+### Link Styling
+
+Each contact link has a clean, card-like appearance:
+
+```css
+.links .link {
+    width: max-content;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    background-color: var(--color-light);
+    color: var(--color-dark);
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    font-size: var(--font-size-small);
+    font-weight: 500;
+    border: 1px solid transparent;
+    transition: transform 0.22s ease, box-shadow 0.22s ease, 
+                background-color 0.22s ease, border-color 0.22s ease;
+}
+```
+
+### Hover Effects
+
+Links slide right and show a border on hover:
+
+```css
+.links .link:hover {
+    transform: translateX(4px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    background-color: rgba(255, 255, 255, 0.95);
+    border-color: var(--color-primary);
+}
+```
+
+**Hover effects**:
+- Slides 4px to the right
+- Adds subtle drop shadow
+- Background lightens slightly
+- Primary color border appears
+
+### Active State
+
+```css
+.links .link:active {
+    transform: translateX(2px);
+}
+```
+
+Reduces translation to 2px when clicked for tactile feedback.
+
+### Icon Styling
+
+```css
+.links .link svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    color: var(--color-primary);
+    transition: transform 0.22s ease;
+}
+
+.links .link:hover svg {
+    transform: scale(1.1);
+}
+```
+
+Icons are colored with the primary color and scale up 10% on hover.
+
+### Subline Text
+
+```css
+.subline {
+    font-size: var(--font-size-small);
+    color: var(--color-dark-grey);
+    margin-bottom: 1.25rem;
+    line-height: 1.5;
+}
+```
+
+## Interactive Features
+
+1. **Hover animations** - Smooth transitions on all properties
+2. **Icon scaling** - Icons grow slightly when hovered
+3. **Horizontal slide** - Links slide to the right
+4. **Border highlight** - Primary color border appears
+5. **Active state** - Reduced transform when clicked
+
+## Accessibility
+
+- **Semantic links** with descriptive text
+- **ARIA labels** for screen readers
+- **External link security** with `rel="noopener noreferrer"`
+- **Keyboard navigation** fully supported
+- **Focus states** inherited from global styles
+- **Protocol handlers** for email and phone
+
+## Customization
+
+To update contact information:
+
+### Change Website URL
+```astro
+<a class="link" href="https://your-website.com" target="_blank" rel="noopener noreferrer">
+    <svg><!-- Icon --></svg>
+    www.your-website.com
+</a>
+```
+
+### Change Email
+```astro
+<a class="link" href="mailto:your.email@domain.com" aria-label="Enviar email a your.email@domain.com">
+    <svg><!-- Icon --></svg>
+    your.email@domain.com
+</a>
+```
+
+### Change Phone Number
+```astro
+<a class="link" href="tel:+1234567890" aria-label="Llamar al +1 234 567 890">
+    <svg><!-- Icon --></svg>
+    +1 234 567 890
+</a>
+```
+
+**Important**: 
+- The `href` attribute should use the unformatted number for `tel:` links
+- The display text can be formatted for readability
+- Update the `aria-label` to match the new contact info
+
+## Adding Additional Contact Methods
+
+To add a new contact option (e.g., LinkedIn):
+
+```astro
+<a class="link" href="https://linkedin.com/in/yourprofile" target="_blank" rel="noopener noreferrer">
+    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" />
+        <path d="M8 11l0 5" />
+        <path d="M8 8l0 .01" />
+        <path d="M12 16l0 -5" />
+        <path d="M16 16v-3a2 2 0 0 0 -4 0" />
+    </svg>
+    LinkedIn Profile
+</a>
+```
+
+## Section ID
+
+The section has an ID for navigation:
+
+```astro
+<section id="contacto" class="history contact">
+```
+
+This allows direct linking with `#contacto` in the URL.
+
+## Related Sections
+
+- [Footer Section](/sections/footer) - Social media links
+- [Chatbot Section](/sections/chatbot) - Interactive AI assistant
+- [Hero Section](/sections/hero) - Initial CTA buttons

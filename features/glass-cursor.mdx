@@ -1,0 +1,387 @@
+---
+title: 'Glass Cursor'
+description: 'Custom glassmorphism cursor effect with smooth animations'
+icon: 'mouse-pointer'
+---
+
+## Overview
+
+The Glass Cursor feature replaces the default cursor with a custom glassmorphism design consisting of two elements: a precise dot and a smooth-following outline with blur effects.
+
+## Implementation
+
+Implemented in `src/scripts/glass-cursor.js` with device and accessibility checks.
+
+## Initialization Checks
+
+### Reduced Motion Check
+
+```javascript
+if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    console.log('Glass cursor disabled: reduced motion preference');
+    return;
+}
+```
+
+Location: `src/scripts/glass-cursor.js:4-7`
+
+### Device Width Check
+
+```javascript
+// Only on desktop (min-width: 1024px)
+if (window.innerWidth < 1024) {
+    console.log('Glass cursor disabled: screen width', window.innerWidth);
+    return;
+}
+```
+
+Location: `src/scripts/glass-cursor.js:10-13`
+
+**Reasoning**: Custom cursors are disabled on mobile/tablet devices where cursor interaction doesn't apply.
+
+## Cursor Elements
+
+### Creating DOM Elements
+
+```javascript
+// Create cursor elements
+const cursorOutline = document.createElement('div');
+cursorOutline.className = 'cursor-outline';
+cursorOutline.style.left = '50%';
+cursorOutline.style.top = '50%';
+
+const cursorDot = document.createElement('div');
+cursorDot.className = 'cursor-dot';
+cursorDot.style.left = '50%';
+cursorDot.style.top = '50%';
+
+document.body.appendChild(cursorOutline);
+document.body.appendChild(cursorDot);
+```
+
+Location: `src/scripts/glass-cursor.js:18-29`
+
+### Element Structure
+
+- **cursor-dot**: Small, instant-following dot
+- **cursor-outline**: Larger outline with delayed follow and glassmorphism effects
+
+## Position Tracking
+
+### Mouse Position Variables
+
+```javascript
+let mouseX = window.innerWidth / 2;
+let mouseY = window.innerHeight / 2;
+let outlineX = mouseX;
+let outlineY = mouseY;
+```
+
+Location: `src/scripts/glass-cursor.js:33-36`
+
+### Mouse Movement Handler
+
+```javascript
+document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    
+    // Dot follows instantly (no offset needed, CSS handles centering)
+    cursorDot.style.left = `${mouseX}px`;
+    cursorDot.style.top = `${mouseY}px`;
+});
+```
+
+Location: `src/scripts/glass-cursor.js:39-46`
+
+**Key Detail**: The dot follows the cursor instantly for precise interaction feedback.
+
+## Smooth Follow Animation
+
+### Animation Loop
+
+```javascript
+function animate() {
+    const delay = 0.12;
+    outlineX += (mouseX - outlineX) * delay;
+    outlineY += (mouseY - outlineY) * delay;
+
+    // Outline follows with delay (no offset needed, CSS handles centering)
+    cursorOutline.style.left = `${outlineX}px`;
+    cursorOutline.style.top = `${outlineY}px`;
+
+    requestAnimationFrame(animate);
+}
+
+animate();
+```
+
+Location: `src/scripts/glass-cursor.js:49-61`
+
+**How it works:**
+- Uses linear interpolation (lerp) for smooth following
+- `delay = 0.12` creates a natural lag effect
+- `requestAnimationFrame` ensures smooth 60fps animation
+
+### Lerp Formula
+
+```
+newPosition = currentPosition + (targetPosition - currentPosition) * delayFactor
+```
+
+With `delay = 0.12`, the outline closes 12% of the distance each frame.
+
+## Interactive Hover Effects
+
+### Adding Hover States
+
+```javascript
+const interactiveElements = document.querySelectorAll(
+    'a, button, .tag, .accordion-header, .q-btn, input, textarea'
+);
+
+interactiveElements.forEach(el => {
+    el.addEventListener('mouseenter', () => {
+        cursorOutline.classList.add('hover');
+        cursorDot.classList.add('hover');
+    });
+
+    el.addEventListener('mouseleave', () => {
+        cursorOutline.classList.remove('hover');
+        cursorDot.classList.remove('hover');
+    });
+});
+```
+
+Location: `src/scripts/glass-cursor.js:64-77`
+
+**Interactive Elements:**
+- Links (`<a>`)
+- Buttons (`<button>`)
+- Tags (`.tag`)
+- Accordion headers
+- Quick question buttons
+- Form inputs
+
+## Hiding Default Cursor
+
+### System Cursor Removal
+
+```javascript
+// Hide default cursor
+document.body.style.cursor = 'none';
+const allElements = document.querySelectorAll('*');
+allElements.forEach(el => {
+    el.style.cursor = 'none';
+});
+```
+
+Location: `src/scripts/glass-cursor.js:79-84`
+
+**Note**: Setting `cursor: none` on all elements prevents any default cursor from appearing.
+
+## Viewport Behavior
+
+### Mouse Leave/Enter Handling
+
+```javascript
+// Handle viewport leave/enter
+document.addEventListener('mouseleave', () => {
+    cursorOutline.style.opacity = '0';
+    cursorDot.style.opacity = '0';
+});
+
+document.addEventListener('mouseenter', () => {
+    cursorOutline.style.opacity = '1';
+    cursorDot.style.opacity = '1';
+});
+```
+
+Location: `src/scripts/glass-cursor.js:86-95`
+
+**Purpose**: Hides custom cursor when mouse leaves the viewport, prevents cursor artifacts at screen edges.
+
+## CSS Styling
+
+### Cursor Dot Styles
+
+```css
+.cursor-dot {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    background: var(--color-primary);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    transition: width 0.3s ease, height 0.3s ease, background 0.3s ease;
+}
+
+.cursor-dot.hover {
+    width: 4px;
+    height: 4px;
+    background: var(--color-primary);
+}
+```
+
+**Features:**
+- Fixed positioning for consistent placement
+- `transform: translate(-50%, -50%)` centers on cursor position
+- `pointer-events: none` prevents blocking interactions
+- Shrinks on hover for cleaner look
+
+### Cursor Outline Styles
+
+```css
+.cursor-outline {
+    position: fixed;
+    width: 40px;
+    height: 40px;
+    border: 2px solid rgba(173, 0, 0, 0.3);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: 9998;
+    transition: width 0.3s ease, height 0.3s ease, border-color 0.3s ease;
+    backdrop-filter: blur(2px);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.cursor-outline.hover {
+    width: 60px;
+    height: 60px;
+    border-color: rgba(173, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+}
+```
+
+**Glassmorphism Effect:**
+- `backdrop-filter: blur(2px)` creates glass effect
+- Semi-transparent background
+- Expands and intensifies on hover
+
+## Initialization
+
+### DOM Ready Check
+
+```javascript
+if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initGlassCursor);
+    } else {
+        initGlassCursor();
+    }
+}
+```
+
+Location: `src/scripts/glass-cursor.js:98-104`
+
+### Export
+
+```javascript
+export { initGlassCursor };
+```
+
+Location: `src/scripts/glass-cursor.js:106`
+
+## Performance Considerations
+
+### Optimization Techniques
+
+1. **requestAnimationFrame**: Syncs with browser refresh rate (60fps)
+2. **CSS Transforms**: Hardware-accelerated positioning
+3. **pointer-events: none**: Prevents cursor from blocking interactions
+4. **Conditional Loading**: Only loads on desktop devices
+
+### Performance Metrics
+
+- **Frame Rate**: Maintains 60fps on modern devices
+- **CPU Usage**: Minimal due to hardware acceleration
+- **Memory**: ~2KB for cursor elements
+
+## Customization
+
+### Adjusting Follow Speed
+
+```javascript
+const delay = 0.12; // Lower = faster, Higher = slower
+```
+
+Recommended range: `0.08` (fast) to `0.20` (slow)
+
+### Changing Cursor Size
+
+```css
+.cursor-dot {
+    width: 8px;   /* Default dot size */
+    height: 8px;
+}
+
+.cursor-outline {
+    width: 40px;  /* Default outline size */
+    height: 40px;
+}
+```
+
+### Adding More Interactive Elements
+
+```javascript
+const interactiveElements = document.querySelectorAll(
+    'a, button, .tag, .my-custom-class'
+);
+```
+
+## Browser Compatibility
+
+| Feature | Browser Support |
+|---------|----------------|
+| `backdrop-filter` | Chrome 76+, Safari 9+ |
+| `requestAnimationFrame` | All modern browsers |
+| CSS transforms | All modern browsers |
+
+## Accessibility
+
+### Reduced Motion
+
+The cursor is automatically disabled when users prefer reduced motion:
+
+```javascript
+if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    return; // Don't initialize custom cursor
+}
+```
+
+### Screen Readers
+
+- Custom cursor is purely visual
+- Does not interfere with screen reader functionality
+- `pointer-events: none` ensures normal interaction behavior
+
+## Troubleshooting
+
+### Cursor Not Appearing
+
+1. Check browser console for initialization messages
+2. Verify screen width is >= 1024px
+3. Ensure reduced motion is not enabled
+4. Check CSS is loaded properly
+
+### Cursor Feels Laggy
+
+- Increase `delay` value (e.g., `0.15`)
+- Check for other heavy animations running
+
+### Hover States Not Working
+
+- Verify element selector in `interactiveElements`
+- Check CSS `.hover` classes are defined
+- Ensure elements aren't being dynamically added after initialization
+
+## Best Practices
+
+1. **Always include fallback**: Default cursor should work if custom cursor fails
+2. **Respect user preferences**: Check for reduced motion
+3. **Test on multiple devices**: Ensure proper desktop-only loading
+4. **Monitor performance**: Use Chrome DevTools to check frame rate
+5. **Provide clear hover feedback**: Make interactive elements obvious

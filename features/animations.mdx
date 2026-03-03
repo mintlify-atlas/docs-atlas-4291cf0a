@@ -1,0 +1,452 @@
+---
+title: 'GSAP Animations'
+description: 'Scroll-triggered and entrance animations using GSAP (GreenSock Animation Platform)'
+icon: 'sparkles'
+---
+
+## Overview
+
+The animation system uses GSAP (GreenSock Animation Platform) with the ScrollTrigger plugin to create smooth, performant entrance and scroll-based animations throughout the site.
+
+## Implementation
+
+All animations are defined in `src/scripts/animations.js` and respect user preferences for reduced motion.
+
+## Setup
+
+### GSAP Registration
+
+```javascript
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
+```
+
+Location: `src/scripts/animations.js:1-4`
+
+### Motion Preference Check
+
+```javascript
+function init() {
+  if (typeof window !== 'undefined' && 
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    return; // Skip all animations
+  }
+  // Initialize animations...
+}
+```
+
+Location: `src/scripts/animations.js:320-323`
+
+## Hero Section Animations
+
+Complex staggered entrance animation for the hero section.
+
+### Badge Animation
+
+```javascript
+if (badge) {
+  gsap.set(badge, { opacity: 0, scale: 0.8, y: -10 });
+  tl.to(badge, {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    duration: 0.4,
+    ease: 'back.out(2)',
+  }, 0);
+}
+```
+
+Location: `src/scripts/animations.js:25-34`
+
+### Word-by-Word Text Animation
+
+```javascript
+// Animates "Hola," and "soy" with slide effect
+if (words.length) {
+  gsap.set(words, { opacity: 0, x: -30, rotationZ: -5 });
+  tl.to(words, {
+    opacity: 1,
+    x: 0,
+    rotationZ: 0,
+    duration: 0.5,
+    stagger: 0.1,
+    ease: 'power3.out',
+  }, 0.2);
+}
+```
+
+Location: `src/scripts/animations.js:37-47`
+
+### Name Letter Animation
+
+Individual letters drop with bounce effect:
+
+```javascript
+if (nameLetters.length) {
+  gsap.set(nameLetters, { 
+    opacity: 0, 
+    y: -80,
+    rotationZ: () => gsap.utils.random(-20, 20),
+    scale: 0.5,
+  });
+  tl.to(nameLetters, {
+    opacity: 1,
+    y: 0,
+    rotationZ: 0,
+    scale: 1,
+    duration: 0.6,
+    stagger: 0.04,
+    ease: 'bounce.out',
+  }, 0.5);
+}
+```
+
+Location: `src/scripts/animations.js:50-66`
+
+**Key Features:**
+- Random rotation for each letter
+- Bounce easing for playful effect
+- Staggered timing (0.04s between letters)
+
+### Wave Emoji Animation
+
+```javascript
+if (wave) {
+  gsap.set(wave, { opacity: 0, scale: 0, rotationZ: -30 });
+  tl.to(wave, {
+    opacity: 1,
+    scale: 1,
+    rotationZ: 0,
+    duration: 0.4,
+    ease: 'back.out(3)',
+  }, 0.9)
+  .to(wave, {
+    rotationZ: 20,
+    duration: 0.15,
+    ease: 'power1.inOut',
+    yoyo: true,
+    repeat: 5,
+  }, 1.1);
+}
+```
+
+Location: `src/scripts/animations.js:69-85`
+
+**Animation Sequence:**
+1. Pop in with back ease
+2. Wave back and forth 5 times
+
+### Photo Slider Animation
+
+```javascript
+const photoSlider = hero.querySelector('.photo-slider');
+if (photoSlider) {
+  gsap.set(photoSlider, { opacity: 0, scale: 0.9, y: 20 });
+  tl.to(photoSlider, {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    duration: 0.7,
+    ease: 'back.out(1.5)',
+  }, 1.0);
+}
+```
+
+Location: `src/scripts/animations.js:99-109`
+
+## Scroll-Based Animations
+
+### Generic Section Reveal
+
+```javascript
+function initScrollReveal() {
+  const sections = document.querySelectorAll('[data-reveal]');
+  sections.forEach((section) => {
+    const inner = section.querySelector('[data-reveal-inner]') || section;
+
+    gsap.from(inner.children, {
+      opacity: 0,
+      y: 50,
+      duration: 0.8,
+      stagger: 0.1,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: section,
+        start: 'top 80%',
+        toggleActions: 'play none none none',
+      },
+    });
+  });
+}
+```
+
+Location: `src/scripts/animations.js:134-152`
+
+**Usage:**
+```html
+<section data-reveal>
+  <div data-reveal-inner>
+    <!-- Children will animate in -->
+  </div>
+</section>
+```
+
+### ScrollTrigger Configuration
+
+```javascript
+scrollTrigger: {
+  trigger: section,        // Element that triggers animation
+  start: 'top 80%',        // When top of section hits 80% viewport height
+  toggleActions: 'play none none none',  // onEnter, onLeave, onEnterBack, onLeaveBack
+}
+```
+
+## Works Section Animation
+
+```javascript
+function initWorksReveal() {
+  const section = document.querySelector('.works');
+  if (!section) return;
+
+  const heading = section.querySelector('.heading');
+  const accordion = section.querySelector('.accordion');
+  const items = accordion ? accordion.querySelectorAll('.accordion-item') : [];
+
+  // Animate heading
+  if (heading) {
+    gsap.from(heading, {
+      opacity: 0,
+      y: 40,
+      duration: 0.7,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: section,
+        start: 'top 80%',
+        toggleActions: 'play none none none',
+      },
+    });
+  }
+
+  // Stagger accordion items
+  if (items.length === 0) return;
+  
+  gsap.from(items, {
+    opacity: 0,
+    y: 60,
+    duration: 0.7,
+    stagger: 0.15,
+    ease: 'power3.out',
+    scrollTrigger: {
+      trigger: accordion,
+      start: 'top 80%',
+      toggleActions: 'play none none none',
+    },
+  });
+}
+```
+
+Location: `src/scripts/animations.js:157-193`
+
+## Skills Section Animation
+
+Animates skill tags with stagger and scale:
+
+```javascript
+function initSkillsReveal() {
+  const section = document.querySelector('.skills');
+  if (!section) return;
+
+  const heading = section.querySelector('.heading');
+  const tags = section.querySelector('.tags');
+  if (!tags) return;
+
+  gsap.set(tags.children, { opacity: 0, y: 30, scale: 0.8 });
+  
+  // Heading animation
+  gsap.from(heading, {
+    opacity: 0,
+    y: 40,
+    duration: 0.7,
+    ease: 'power3.out',
+    scrollTrigger: {
+      trigger: section,
+      start: 'top 80%',
+      toggleActions: 'play none none none',
+    },
+  });
+
+  // Tags animation with back ease
+  gsap.to(tags.children, {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    duration: 0.5,
+    stagger: 0.04,
+    ease: 'back.out(1.2)',
+    scrollTrigger: {
+      trigger: tags,
+      start: 'top 85%',
+      toggleActions: 'play none none none',
+    },
+  });
+}
+```
+
+Location: `src/scripts/animations.js:198-233`
+
+## Contact Section Animation
+
+```javascript
+function initContactReveal() {
+  const section = document.querySelector('.contact');
+  if (!section) return;
+
+  const heading = section.querySelector('.heading');
+  const subline = section.querySelector('.subline');
+  const links = section.querySelector('.links');
+  if (!heading || !links) return;
+
+  const elements = [heading, subline, ...links.querySelectorAll('.link')]
+    .filter(Boolean);
+
+  gsap.from(elements, {
+    opacity: 0,
+    y: 30,
+    duration: 0.6,
+    stagger: 0.1,
+    ease: 'power3.out',
+    scrollTrigger: {
+      trigger: section,
+      start: 'top 80%',
+      toggleActions: 'play none none none',
+    },
+  });
+}
+```
+
+Location: `src/scripts/animations.js:238-261`
+
+## Chatbot Section Animation
+
+```javascript
+function initChatbotReveal() {
+  const section = document.querySelector('.chatbot-section');
+  if (!section) return;
+
+  const heading = section.querySelector('.heading');
+  const subline = section.querySelector('.subline');
+  const chatContainer = section.querySelector('.chat-container');
+
+  // Staggered entrance
+  if (heading) {
+    gsap.from(heading, {
+      opacity: 0,
+      y: 40,
+      duration: 0.7,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: section,
+        start: 'top 80%',
+        toggleActions: 'play none none none',
+      },
+    });
+  }
+
+  if (chatContainer) {
+    gsap.from(chatContainer, {
+      opacity: 0,
+      y: 50,
+      scale: 0.95,
+      duration: 0.8,
+      delay: 0.2,
+      ease: 'back.out(1.2)',
+      scrollTrigger: {
+        trigger: chatContainer,
+        start: 'top 85%',
+        toggleActions: 'play none none none',
+      },
+    });
+  }
+}
+```
+
+Location: `src/scripts/animations.js:266-318`
+
+## Initialization
+
+```javascript
+function init() {
+  if (typeof window !== 'undefined' && 
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    return;
+  }
+  initHeroEntrance();
+  initScrollReveal();
+  initWorksReveal();
+  initSkillsReveal();
+  initChatbotReveal();
+  initContactReveal();
+}
+
+if (typeof document !== 'undefined') {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+}
+```
+
+Location: `src/scripts/animations.js:320-338`
+
+## GSAP Easing Reference
+
+Commonly used easing functions:
+
+- `power3.out`: Smooth deceleration
+- `back.out(2)`: Overshoot and settle back
+- `bounce.out`: Bouncing effect
+- `power1.inOut`: Symmetrical ease in/out
+
+## Animation Timing Guide
+
+| Element | Delay | Duration | Stagger |
+|---------|-------|----------|----------|
+| Badge | 0s | 0.4s | - |
+| Words | 0.2s | 0.5s | 0.1s |
+| Name letters | 0.5s | 0.6s | 0.04s |
+| Wave | 0.9s | 0.4s | - |
+| Description | 1.3s | 0.5s | - |
+| Photo | 1.0s | 0.7s | - |
+| CTAs | 1.5s | 0.5s | - |
+
+## Best Practices
+
+1. **Performance**: Use `will-change` CSS for animated elements
+2. **Accessibility**: Always check and respect `prefers-reduced-motion`
+3. **Timing**: Keep entrance animations under 2 seconds total
+4. **Stagger**: Use 0.04-0.15s for natural feel
+5. **Easing**: Match easing to element personality (playful vs. professional)
+
+## Custom Animation Example
+
+```javascript
+function customAnimation() {
+  const element = document.querySelector('.my-element');
+  if (!element) return;
+  
+  gsap.from(element, {
+    opacity: 0,
+    y: 50,
+    duration: 0.8,
+    ease: 'power3.out',
+    scrollTrigger: {
+      trigger: element,
+      start: 'top 80%',
+      toggleActions: 'play none none none',
+    },
+  });
+}
+```

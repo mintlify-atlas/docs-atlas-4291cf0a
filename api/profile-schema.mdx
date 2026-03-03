@@ -1,0 +1,259 @@
+---
+title: 'Profile Schema'
+description: 'Complete JSON schema for professional profile data structure'
+---
+
+The profile schema defines the structure for storing professional information, including personal details, work experience, skills, and values.
+
+## Root Fields
+
+<ResponseField name="nombre" type="string" required>
+  Full name of the professional
+  
+  Example: `"Nicolás Gaitán"`
+</ResponseField>
+
+<ResponseField name="apodo" type="string">
+  Nickname or preferred name
+  
+  Example: `"Nico"`
+</ResponseField>
+
+<ResponseField name="titulo" type="string" required>
+  Professional title or current role
+  
+  Example: `"Publicista Creativo & Digital Project Manager"`
+</ResponseField>
+
+<ResponseField name="ubicacion" type="string">
+  Current location or country
+  
+  Example: `"Chile"`
+</ResponseField>
+
+<ResponseField name="empresa_actual" type="string">
+  Current employer or company
+  
+  Example: `"VML Chile"`
+</ResponseField>
+
+<ResponseField name="email" type="string" required>
+  Contact email address
+  
+  Example: `"nicolas@inadaptado.cl"`
+</ResponseField>
+
+<ResponseField name="telefono" type="string">
+  Contact phone number with country code
+  
+  Example: `"+56 9 3116 5405"`
+</ResponseField>
+
+<ResponseField name="sitio_web" type="string">
+  Personal or professional website URL
+  
+  Example: `"https://inadaptado.cl"`
+</ResponseField>
+
+<ResponseField name="resumen" type="string" required>
+  Professional summary or bio describing background and expertise
+  
+  Example: `"Publicista creativo apasionado por la tecnología..."`
+</ResponseField>
+
+<ResponseField name="propuesta_valor" type="array" required>
+  Array of key value propositions or unique selling points
+  
+  <Expandable title="Array items">
+    <ResponseField name="item" type="string">
+      Individual value proposition statement
+      
+      Example: `"Combino creatividad publicitaria con habilidades técnicas de desarrollo"`
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Experience
+
+<ResponseField name="experiencia" type="array" required>
+  Professional work experience history
+  
+  <Expandable title="Experience object">
+    <ResponseField name="cargo" type="string" required>
+      Job title or position
+      
+      Example: `"Digital Project Manager"`
+    </ResponseField>
+    
+    <ResponseField name="empresa" type="string" required>
+      Company or organization name
+      
+      Example: `"VML Chile"`
+    </ResponseField>
+    
+    <ResponseField name="periodo" type="string" required>
+      Employment period or date range
+      
+      Example: `"Enero 2024 - Actualidad"`
+    </ResponseField>
+    
+    <ResponseField name="descripcion" type="string" required>
+      Detailed description of responsibilities and achievements
+      
+      Example: `"Lidero la adopción e implementación de WPP Open..."`
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="roles_desempenados" type="array">
+  List of all roles or positions held throughout career
+  
+  <Expandable title="Array items">
+    <ResponseField name="role" type="string">
+      Role or position title
+      
+      Example: `"Project Manager Digital"`
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Skills
+
+<ResponseField name="habilidades" type="object" required>
+  Categorized technical and professional skills
+  
+  <Expandable title="Skills object">
+    <ResponseField name="desarrollo" type="array">
+      Development and programming skills
+      
+      Example: `["HTML", "CSS", "JavaScript", "PHP", "MySQL", "Node.js", "Astro.js", "Git", "WordPress", "WooCommerce"]`
+    </ResponseField>
+    
+    <ResponseField name="crm" type="array">
+      CRM platforms and marketing automation tools
+      
+      Example: `["SalesForce Marketing Cloud", "Eloqua", "Selligent", "MasterBase", "Click Dimensions"]`
+    </ResponseField>
+    
+    <ResponseField name="gestion" type="array">
+      Project management and collaboration tools
+      
+      Example: `["Asana", "Notion", "Miro", "Kanban", "Scrum"]`
+    </ResponseField>
+    
+    <ResponseField name="analytics" type="array">
+      Analytics and data visualization tools
+      
+      Example: `["Google Analytics", "Looker Studio", "Power BI"]`
+    </ResponseField>
+    
+    <ResponseField name="diseno" type="array">
+      Design and creative tools
+      
+      Example: `["Figma", "Adobe Suite"]`
+    </ResponseField>
+    
+    <ResponseField name="ia_automatizacion" type="array">
+      AI and automation platforms
+      
+      Example: `["n8n", "WPP Open", "Claude MCP", "Midjourney"]`
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Additional Information
+
+<ResponseField name="clientes_destacados" type="array">
+  Notable clients or brands worked with
+  
+  <Expandable title="Array items">
+    <ResponseField name="client" type="string">
+      Client or brand name
+      
+      Example: `"Movistar"`
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="industrias" type="array">
+  Industries or sectors with experience
+  
+  <Expandable title="Array items">
+    <ResponseField name="industry" type="string">
+      Industry or sector name
+      
+      Example: `"Automotriz"`
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="idiomas" type="array">
+  Languages spoken with proficiency levels
+  
+  <Expandable title="Array items">
+    <ResponseField name="language" type="string">
+      Language and proficiency level
+      
+      Example: `"Español (nativo)"`
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Personality
+
+<ResponseField name="personalidad" type="object">
+  Personal traits, values, and interests
+  
+  <Expandable title="Personality object">
+    <ResponseField name="estilo" type="string">
+      Communication or work style
+      
+      Example: `"Cercano, directo y entusiasta"`
+    </ResponseField>
+    
+    <ResponseField name="valores" type="array">
+      Core professional values
+      
+      Example: `["Creatividad", "Innovación", "Colaboración", "Excelencia técnica"]`
+    </ResponseField>
+    
+    <ResponseField name="intereses" type="array">
+      Professional and personal interests
+      
+      Example: `["Tecnología", "IA", "Automatización", "Diseño", "Música"]`
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="razones_para_contratar" type="array">
+  Key reasons or benefits for hiring this professional
+  
+  <Expandable title="Array items">
+    <ResponseField name="reason" type="string">
+      Individual hiring reason or benefit
+      
+      Example: `"Perfil híbrido único: creatividad + técnica + gestión"`
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Example JSON
+
+```json
+{
+  "nombre": "Nicolás Gaitán",
+  "apodo": "Nico",
+  "titulo": "Publicista Creativo & Digital Project Manager",
+  "ubicacion": "Chile",
+  "empresa_actual": "VML Chile",
+  "email": "nicolas@inadaptado.cl",
+  "telefono": "+56 9 3116 5405",
+  "sitio_web": "https://inadaptado.cl",
+  "resumen": "Publicista creativo apasionado por la tecnología y la innovación...",
+  "habilidades": {
+    "desarrollo": ["HTML", "CSS", "JavaScript", "PHP"],
+    "crm": ["SalesForce Marketing Cloud", "Eloqua"],
+    "gestion": ["Asana", "Notion", "Scrum"]
+  }
+}
+```

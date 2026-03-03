@@ -1,80 +1,368 @@
 ---
-title: "Quickstart"
-description: "Start building awesome documentation in minutes"
+title: Quick Start
+description: Get CV Staff Web running locally in minutes with this step-by-step guide
+icon: 'bolt'
 ---
 
-## Get started in three steps
+## Prerequisites
 
-Get your documentation site running locally and make your first customization.
-
-### Step 1: Set up your local environment
-
-<AccordionGroup>
-  <Accordion icon="copy" title="Clone your docs locally">
-    During the onboarding process, you created a GitHub repository with your docs content if you didn't already have one. You can find a link to this repository in your [dashboard](https://dashboard.mintlify.com).
-    
-    To clone the repository locally so that you can make and preview changes to your docs, follow the [Cloning a repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) guide in the GitHub docs.
-  </Accordion>
-  <Accordion icon="rectangle-terminal" title="Start the preview server">
-    1. Install the Mintlify CLI: `npm i -g mint`
-    2. Navigate to your docs directory and run: `mint dev`
-    3. Open `http://localhost:3000` to see your docs live!
-    
-    <Tip>Your preview updates automatically as you edit files.</Tip>
-  </Accordion>
-</AccordionGroup>
-
-### Step 2: Deploy your changes
-
-<AccordionGroup>
-  <Accordion icon="github" title="Install our GitHub app">
-    Install the Mintlify GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app).
-    
-    Our GitHub app automatically deploys your changes to your docs site, so you don't need to manage deployments yourself.
-</Accordion>
-<Accordion icon="palette" title="Update your site name and colors">
-    For a first change, let's update the name and colors of your docs site.
-
-    1. Open `docs.json` in your editor.
-    2. Change the `"name"` field to your project name.
-    3. Update the `"colors"` to match your brand.
-    4. Save and see your changes instantly at `http://localhost:3000`.
-
-    <Tip>Try changing the primary color to see an immediate difference!</Tip>
-  </Accordion>
-</AccordionGroup>
-
-### Step 3: Go live
-
-<Accordion icon="rocket" title="Publish your docs">
-  1. Commit and push your changes.
-  2. Your docs will update and be live in moments!
-</Accordion>
-
-## Next steps
-
-Now that you have your docs running, explore these key features:
+Before you begin, ensure you have the following installed:
 
 <CardGroup cols={2}>
+  <Card title="Node.js" icon="node-js">
+    Version 18.0 or higher recommended
+  </Card>
+  <Card title="npm" icon="box">
+    Comes bundled with Node.js
+  </Card>
+</CardGroup>
 
-<Card title="Write Content" icon="pen-to-square" href="/essentials/markdown">
-  Learn MDX syntax and start writing your documentation.
-</Card>
+<Info>
+  You can verify your installations by running:
+  ```bash
+  node --version
+  npm --version
+  ```
+</Info>
 
-<Card title="Customize style" icon="palette" href="/essentials/settings">
-  Make your docs match your brand perfectly.
-</Card>
+## Installation
 
-<Card title="Add code examples" icon="square-code" href="/essentials/code">
-  Include syntax-highlighted code blocks.
-</Card>
+<Steps>
+  <Step title="Clone the Repository">
+    Get the source code from your repository:
+    
+    ```bash
+    git clone <your-repository-url>
+    cd cv-staff-web
+    ```
+  </Step>
 
-<Card title="API documentation" icon="code" href="/api-reference/introduction">
-  Auto-generate API docs from OpenAPI specs.
-</Card>
+  <Step title="Install Dependencies">
+    Install all required packages using npm:
+    
+    ```bash
+    npm install
+    ```
+    
+    This will install:
+    - **astro** (^5.7.13) - The core framework
+    - **gsap** (^3.14.2) - Animation library
+    - **swiper** (^11.2.6) - Slider component
+    - **@fontsource-variable/onest** (^5.2.8) - Typography
+  </Step>
 
+  <Step title="Configure Environment Variables">
+    Create your environment file from the example:
+    
+    ```bash
+    cp .env.example .env
+    ```
+    
+    Edit `.env` and add your Groq API key:
+    
+    ```bash
+    # Get your API key from: https://console.groq.com/keys
+    PUBLIC_GROQ_API_KEY=your_api_key_here
+    ```
+    
+    <Warning>
+      The AI chatbot will not work without a valid Groq API key. Sign up for free at [console.groq.com](https://console.groq.com/keys).
+    </Warning>
+  </Step>
+
+  <Step title="Start Development Server">
+    Launch the local development server:
+    
+    ```bash
+    npm run dev
+    ```
+    
+    The site will be available at:
+    ```
+    http://localhost:4321
+    ```
+    
+    <Info>
+      The development server includes hot module replacement (HMR) - changes you make will be reflected instantly in the browser.
+    </Info>
+  </Step>
+</Steps>
+
+## Available Commands
+
+All commands are run from the root of the project:
+
+<CodeGroup>
+
+```bash Development
+npm run dev
+# Starts local dev server at localhost:4321
+```
+
+```bash Build
+npm run build
+# Build your production site to ./dist/
+```
+
+```bash Preview
+npm run preview
+# Preview your build locally before deploying
+```
+
+```bash Astro CLI
+npm run astro -- --help
+# Get help using the Astro CLI
+```
+
+</CodeGroup>
+
+## Project Structure
+
+Understand the key files and directories:
+
+```text
+/
+├── public/              # Static assets (images, videos, etc.)
+│   ├── profile_01.jpeg
+│   └── assets/
+│       ├── images/
+│       └── videos/
+├── src/
+│   ├── components/      # Reusable Astro components
+│   │   ├── Badget.astro
+│   │   ├── WelcomeCard.astro
+│   │   ├── MarqueeV1.astro
+│   │   └── SectionCard.astro
+│   ├── data/           # JSON data files
+│   │   ├── nico-profile.json
+│   │   └── herosliders.json
+│   ├── layouts/        # Page layouts
+│   │   └── Layout.astro
+│   ├── pages/          # Routes (file-based routing)
+│   │   └── index.astro
+│   ├── scripts/        # Client-side JavaScript
+│   │   ├── animations.js      # GSAP animations
+│   │   ├── glass-cursor.js    # Custom cursor effect
+│   │   └── color-transition.js
+│   ├── sections/       # Page sections
+│   │   ├── hero.astro
+│   │   ├── chatbot.astro
+│   │   ├── skills.astro
+│   │   ├── works.astro
+│   │   └── contact.astro
+│   └── styles/         # Global styles
+│       ├── reset.css
+│       └── styles.css
+├── .env                # Environment variables (create this)
+├── .env.example        # Environment template
+├── astro.config.mjs    # Astro configuration
+├── package.json        # Dependencies and scripts
+└── tsconfig.json       # TypeScript configuration
+```
+
+<Note>
+  The `src/pages/` directory uses file-based routing. Each `.astro` file becomes a route automatically.
+</Note>
+
+## Basic Customization
+
+Get started with these quick customizations:
+
+### Update Profile Information
+
+Edit `src/data/nico-profile.json` with your own information:
+
+```json
+{
+  "name": "Your Name",
+  "role": "Your Role",
+  "description": "Your professional summary",
+  "skills": [...],
+  "experience": [...]
+}
+```
+
+### Change Color Scheme
+
+Update CSS custom properties in `src/layouts/Layout.astro`:
+
+```css
+:root {
+  --color-primary: #ad0000;        /* Main brand color */
+  --color-primary-light: #ff9595;  /* Light variant */
+  --color-primary-dark: #103056;   /* Dark variant */
+  --color-background: #f2f2f2;     /* Page background */
+}
+```
+
+### Add Your Photos
+
+Replace images in the `public/` directory:
+
+```
+public/
+├── profile_01.jpeg     # Main profile photo
+└── assets/
+    ├── images/
+    │   ├── photo_talk.png
+    │   ├── photo_setup.jpeg
+    │   └── photo_doodle.jpeg
+    └── videos/
+        └── photo_video.mp4
+```
+
+Then update the photo array in `src/sections/hero.astro`:
+
+```javascript
+const photos = [
+  { type: "image", src: "/profile_01.jpeg", alt: "Your Name - Portrait" },
+  { type: "video", src: "/assets/videos/your_video.mp4", alt: "Your video" },
+  // Add more photos...
+];
+```
+
+### Modify Section Content
+
+Each section is a separate component in `src/sections/`:
+
+- `hero.astro` - Landing section with photo slider
+- `history.astro` - Professional background
+- `skills.astro` - Skills and technologies
+- `works.astro` - Work experience/portfolio
+- `chatbot.astro` - AI assistant
+- `contact.astro` - Contact information
+
+Edit these files directly to change content.
+
+## Testing the AI Chatbot
+
+Once your Groq API key is configured:
+
+<Steps>
+  <Step title="Navigate to AI Chat Section">
+    Scroll to the "Pregunta lo que necesites" section or click the AI Chat link in the navigation
+  </Step>
+  
+  <Step title="Try Quick Questions">
+    Click one of the pre-configured question buttons:
+    - Fortalezas (Strengths)
+    - CRM (CRM Experience)
+    - Contratar (Why Hire)
+    - Herramientas (Tools)
+  </Step>
+  
+  <Step title="Ask Custom Questions">
+    Type your own question in the input field and click "Consultar"
+  </Step>
+</Steps>
+
+<Info>
+  The chatbot has a 2-second cooldown between requests to prevent rate limiting. Responses are typically very fast thanks to Groq's optimized inference.
+</Info>
+
+## Verifying Everything Works
+
+Check that all features are functioning:
+
+<CardGroup cols={2}>
+  <Card title="Animations" icon="wand-magic-sparkles">
+    Hero text should animate in on page load
+  </Card>
+  <Card title="Photo Slider" icon="images">
+    Swipe or click to navigate through photos
+  </Card>
+  <Card title="Glass Cursor" icon="cursor">
+    Custom cursor appears on desktop (1024px+)
+  </Card>
+  <Card title="AI Chatbot" icon="comments">
+    Ask a question and receive a response
+  </Card>
+  <Card title="Scroll Effects" icon="arrow-down">
+    Sections reveal as you scroll down
+  </Card>
+  <Card title="Responsive Design" icon="mobile">
+    Resize browser to test mobile layouts
+  </Card>
+</CardGroup>
+
+## Troubleshooting
+
+### Port Already in Use
+
+If port 4321 is already in use:
+
+```bash
+# Astro will automatically try port 4322, 4323, etc.
+# Or specify a custom port:
+npm run dev -- --port 3000
+```
+
+### AI Chatbot Not Responding
+
+<Steps>
+  <Step title="Verify API Key">
+    Check that `PUBLIC_GROQ_API_KEY` is set correctly in `.env`
+  </Step>
+  <Step title="Check Browser Console">
+    Open DevTools (F12) and look for error messages
+  </Step>
+  <Step title="Test API Key">
+    Verify your API key at [console.groq.com](https://console.groq.com)
+  </Step>
+</Steps>
+
+### Animations Not Working
+
+Check if "Reduce Motion" is enabled in your OS settings:
+
+- **macOS**: System Preferences → Accessibility → Display → Reduce motion
+- **Windows**: Settings → Ease of Access → Display → Show animations
+
+The site respects `prefers-reduced-motion` and disables animations when this preference is set.
+
+### Build Errors
+
+Clear the cache and rebuild:
+
+```bash
+rm -rf node_modules .astro dist
+npm install
+npm run build
+```
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card
+    title="Architecture Overview"
+    icon="sitemap"
+    href="/architecture/project-structure"
+  >
+    Learn about the component structure and design patterns
+  </Card>
+  <Card
+    title="AI Chatbot Deep Dive"
+    icon="robot"
+    href="/features/ai-chatbot"
+  >
+    Understand how the AI assistant works
+  </Card>
+  <Card
+    title="Animation System"
+    icon="film"
+    href="/features/animations"
+  >
+    Master GSAP animations and effects
+  </Card>
+  <Card
+    title="Deployment"
+    icon="rocket"
+    href="/deployment/build"
+  >
+    Deploy your site to production
+  </Card>
 </CardGroup>
 
 <Note>
-  **Need help?** See our [full documentation](https://mintlify.com/docs) or join our [community](https://mintlify.com/community).
+  **Ready to customize?** Start by updating your profile information and photos, then explore the component structure to make deeper changes.
 </Note>

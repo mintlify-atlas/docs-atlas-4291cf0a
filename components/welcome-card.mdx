@@ -1,0 +1,220 @@
+---
+title: Welcome Card
+description: Animated hero heading with name and description
+---
+
+The `WelcomeCard.astro` component creates an engaging welcome message with animated text. It displays a greeting, name with letter-by-letter animation, and a description, making it perfect for hero sections and personal introductions.
+
+## Props
+
+<ParamField path="name" type="string" required>
+  The name to display in the hero title. Each letter will be individually animated.
+</ParamField>
+
+<ParamField path="description" type="string" required>
+  A description or tagline displayed below the greeting. This provides context about the person or role.
+</ParamField>
+
+## Usage
+
+Import and use the WelcomeCard component with name and description:
+
+```astro
+---
+import WelcomeCard from '../components/WelcomeCard.astro';
+---
+
+<WelcomeCard 
+    name='Nico Gaitán' 
+    description='Creativo digital con visión técnica. Convierto ideas en experiencias digitales que funcionan, impactan y generan resultados.' 
+/>
+```
+
+## Example
+
+From the hero section of CV Staff Web:
+
+```astro src/sections/hero.astro
+---
+import Badget from '../components/Badget.astro';
+import WelcomeCard from '../components/WelcomeCard.astro';
+---
+
+<section id="inicio" class="hero">
+    <Badget />
+    
+    <WelcomeCard 
+        name='Nico Gaitán' 
+        description='Creativo digital con visión técnica. Convierto ideas en experiencias digitales que funcionan, impactan y generan resultados.' 
+    />
+    
+    <div class="photo-slider">
+        <!-- Photo slider content -->
+    </div>
+</section>
+```
+
+## Features
+
+### Animated Text Structure
+
+The component creates a multi-line heading with:
+
+1. **Line 1**: "Hola," (Hello)
+2. **Line 2**: "soy" (I am) + animated name + waving hand emoji
+
+### Letter-by-Letter Animation
+
+The name is split into individual letters, each wrapped in a span with an index:
+
+```astro
+const nameLetters = name.split('');
+
+{nameLetters.map((letter, i) => (
+    <span class="letter" style={`--i: ${i}`}>
+        {letter === ' ' ? '\u00A0' : letter}
+    </span>
+))}
+```
+
+This enables CSS animations that can target each letter individually using the `--i` custom property.
+
+### Emoji Animation
+
+Includes a waving hand emoji (👋) with its own animation class.
+
+## HTML Structure
+
+```astro
+<h1 class="hero-title">
+    <span class="line-1">
+        <span class="word" data-animate="word">Hola,</span>
+    </span>
+    <span class="line-2">
+        <span class="word" data-animate="word">soy</span>
+        <span class="name" data-animate="name">
+            <!-- Individual letter spans -->
+        </span>
+        <span class="wave" data-animate="wave">👋</span>
+    </span>
+</h1>
+
+<p class="hero-description">
+    {description}
+</p>
+```
+
+## Styling Details
+
+### Hero Title
+
+- **Font size**: 3rem
+- **Font weight**: 300 (light)
+- **Line height**: 1.1
+- **Color**: `var(--color-dark)`
+- **Bottom margin**: 2rem
+
+### Name Styling
+
+- **Font weight**: Bold
+- **Font size**: 2.5rem (slightly smaller than main title)
+- **Color**: `var(--color-primary)` (accent color)
+- **Display**: Inline-flex for proper letter spacing
+
+### Individual Letters
+
+- **Display**: Inline-block (allows for transforms)
+- **Transform origin**: Bottom center (for scaling/rotating animations)
+
+### Wave Emoji
+
+- **Font size**: 2.5rem (matches name size)
+- **Transform origin**: 70% 70% (enables natural wave animation)
+
+### Description
+
+- **Font size**: 1rem
+- **Color**: `var(--color-text)`
+- **Line height**: 1.5
+- **Bottom margin**: 2rem
+
+## Animation Hooks
+
+The component includes data attributes for animation targeting:
+
+- `data-animate="word"` - Animate the greeting words
+- `data-animate="name"` - Animate the name container
+- `data-animate="wave"` - Animate the wave emoji
+
+You can add custom JavaScript to trigger animations on these elements:
+
+```javascript
+const animatedElements = document.querySelectorAll('[data-animate]');
+animatedElements.forEach((el, index) => {
+    el.style.animationDelay = `${index * 0.1}s`;
+    el.classList.add('animate-in');
+});
+```
+
+## Responsive Considerations
+
+### Line 2 Layout
+
+```css
+.line-2 {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.3em;
+}
+```
+
+The second line uses flexbox with wrapping, ensuring the name and emoji wrap gracefully on smaller screens.
+
+## Accessibility
+
+- Uses semantic `<h1>` heading for the main title
+- Preserves spaces in the name using `\u00A0` (non-breaking space)
+- Maintains readable text hierarchy with `<p>` for description
+
+## Customization Examples
+
+### Different Language
+
+```astro
+<WelcomeCard 
+    name='Jane Smith' 
+    description='Creative developer turning ideas into reality.' 
+/>
+```
+
+### Longer Names
+
+The component handles long names gracefully due to flex-wrap:
+
+```astro
+<WelcomeCard 
+    name='María José García-López' 
+    description='Arquitecta de soluciones digitales.' 
+/>
+```
+
+### Multilingual Support
+
+To support different languages, you could enhance the component:
+
+```astro
+interface Props {
+    name: string;
+    description: string;
+    greeting?: string;  // Default: "Hola,"
+    connector?: string; // Default: "soy"
+    emoji?: string;     // Default: "👋"
+}
+```
+
+## Performance Notes
+
+- Name splitting happens at build time (server-side)
+- Each letter is a separate DOM element, consider performance with very long names
+- Animation can be added via CSS or JavaScript without impacting initial render

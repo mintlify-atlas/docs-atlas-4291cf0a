@@ -1,0 +1,183 @@
+---
+title: Profile Data
+description: Customize your CV Staff profile data and structure
+---
+
+## Overview
+
+CV Staff uses a JSON-based profile system to store and display your professional information. All profile data is stored in `src/data/nico-profile.json` and can be customized to match your personal information.
+
+## Profile Data Structure
+
+The profile data follows this JSON schema:
+
+### Basic Information
+
+```json
+{
+  "nombre": "Full Name",
+  "apodo": "Nickname",
+  "titulo": "Professional Title",
+  "ubicacion": "Location",
+  "empresa_actual": "Current Company",
+  "email": "email@example.com",
+  "telefono": "+00 0 0000 0000",
+  "sitio_web": "https://yourwebsite.com",
+  "resumen": "Professional summary text..."
+}
+```
+
+### Value Proposition
+
+An array of key selling points:
+
+```json
+"propuesta_valor": [
+  "Key strength 1",
+  "Key strength 2",
+  "Key strength 3"
+]
+```
+
+### Work Experience
+
+An array of experience objects:
+
+```json
+"experiencia": [
+  {
+    "cargo": "Job Title",
+    "empresa": "Company Name",
+    "periodo": "Start Date - End Date",
+    "descripcion": "Description of responsibilities and achievements..."
+  }
+]
+```
+
+### Skills
+
+Categorized skills object:
+
+```json
+"habilidades": {
+  "desarrollo": ["HTML", "CSS", "JavaScript"],
+  "crm": ["SalesForce", "Eloqua"],
+  "gestion": ["Asana", "Notion"],
+  "analytics": ["Google Analytics"],
+  "diseno": ["Figma", "Adobe Suite"],
+  "ia_automatizacion": ["n8n", "Claude MCP"]
+}
+```
+
+### Additional Fields
+
+```json
+{
+  "roles_desempenados": ["Role 1", "Role 2"],
+  "clientes_destacados": ["Client 1", "Client 2"],
+  "industrias": ["Industry 1", "Industry 2"],
+  "idiomas": ["Spanish (native)", "English (professional)"],
+  "personalidad": {
+    "estilo": "Communication style",
+    "valores": ["Value 1", "Value 2"],
+    "intereses": ["Interest 1", "Interest 2"]
+  },
+  "razones_para_contratar": [
+    "Reason 1",
+    "Reason 2"
+  ]
+}
+```
+
+## Customizing Your Profile
+
+### Step 1: Locate the Profile File
+
+Navigate to `src/data/nico-profile.json` in your project.
+
+### Step 2: Update Basic Information
+
+Replace the basic fields with your information:
+
+```json
+{
+  "nombre": "Your Full Name",
+  "apodo": "Your Nickname",
+  "titulo": "Your Professional Title",
+  "ubicacion": "Your Location",
+  "empresa_actual": "Your Current Company",
+  "email": "your.email@example.com",
+  "telefono": "+1 234 567 8900",
+  "sitio_web": "https://yourwebsite.com"
+}
+```
+
+### Step 3: Add Your Experience
+
+Update the `experiencia` array with your work history:
+
+```json
+"experiencia": [
+  {
+    "cargo": "Senior Developer",
+    "empresa": "Tech Corp",
+    "periodo": "January 2023 - Present",
+    "descripcion": "Led development of enterprise applications..."
+  }
+]
+```
+
+### Step 4: Customize Skills
+
+Modify the skills categories to match your expertise:
+
+```json
+"habilidades": {
+  "frontend": ["React", "Vue", "Angular"],
+  "backend": ["Node.js", "Python", "Go"],
+  "tools": ["Docker", "Kubernetes"]
+}
+```
+
+<Note>
+  You can add or remove skill categories as needed. The CV will automatically adapt to display your custom categories.
+</Note>
+
+### Step 5: Update Personality & Values
+
+Customize your professional personality:
+
+```json
+"personalidad": {
+  "estilo": "Professional, collaborative, and detail-oriented",
+  "valores": ["Innovation", "Quality", "Teamwork"],
+  "intereses": ["Open Source", "AI", "Web3"]
+}
+```
+
+## Validation Tips
+
+<Warning>
+  Always validate your JSON after making changes to avoid syntax errors. Use a JSON validator or your code editor's built-in validation.
+</Warning>
+
+- Ensure all strings are properly quoted
+- Arrays should use square brackets `[]`
+- Objects should use curly braces `{}`
+- Don't forget commas between items (but not after the last item)
+- Special characters in strings should be escaped
+
+## Example: Complete Profile
+
+Refer to `src/data/nico-profile.json` in the source code for a complete working example with all fields populated.
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Styling" icon="palette" href="/customization/styling">
+    Customize colors, fonts, and visual appearance
+  </Card>
+  <Card title="Environment Variables" icon="key" href="/customization/environment-variables">
+    Configure API keys and environment settings
+  </Card>
+</CardGroup>

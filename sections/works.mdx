@@ -1,0 +1,327 @@
+---
+title: Works Section
+description: Professional experience displayed as an interactive accordion
+---
+
+The Works section showcases professional experience using an expandable accordion interface with company logos, job titles, and detailed descriptions.
+
+## Overview
+
+This section features:
+- Section heading with briefcase icon
+- Accordion-style job listings
+- Company logos and metadata
+- Expandable/collapsible descriptions
+- Animated chevron indicators
+
+## File Location
+
+```
+src/sections/works.astro
+```
+
+## Structure
+
+The section uses native HTML `<details>` elements for accessible accordion functionality:
+
+```astro
+<section id="experiencia" class="history works">
+    <h2 class="heading">
+        <svg><!-- Briefcase icon --></svg>
+        Mi experiencia
+    </h2>
+
+    <div class="accordion">
+        <details class="accordion-item" open>
+            <summary class="accordion-header">
+                <!-- Logo, title, company, dates -->
+            </summary>
+            <div class="accordion-content">
+                <!-- Job description -->
+            </div>
+        </details>
+        <!-- More accordion items... -->
+    </div>
+</section>
+```
+
+## Experience Entries
+
+### 1. VML Chile (Current)
+
+**Position**: Digital Project Manager  
+**Duration**: Enero 2024 - Actualidad  
+**Logo**: `/assets/images/work_vml.png`
+
+```astro
+<details class="accordion-item" open>
+    <summary class="accordion-header">
+        <div class="logo">
+            <img src="/assets/images/work_vml.png" alt="VML Chile">
+        </div>
+        <div class="captions">
+            <h3 class="job">Digital Project Manager</h3>
+            <span class="company">VML Chile</span>
+            <span class="date">Enero 2024 - Actualidad</span>
+        </div>
+        <svg class="chevron"><!-- Chevron down icon --></svg>
+    </summary>
+    <div class="accordion-content">
+        <p>Lidero la adopción e implementación de WPP Open...</p>
+        <p>Impulso la innovación mediante automatización...</p>
+    </div>
+</details>
+```
+
+**Key responsibilities**:
+- WPP Open platform implementation
+- Team coordination for Movistar, IKEA, Reebok
+- Innovation through automation and agile methodologies
+- QA, content management, and emerging technologies
+
+### 2. Wunderman Thompson Chile
+
+**Position**: Digital Project Manager  
+**Duration**: Enero 2021 - Enero 2024  
+**Logo**: `/assets/images/work_wt.png`
+
+**Key responsibilities**:
+- Digital and CRM project management for Derco, Movistar, IKEA, Mallplaza
+- SalesForce Marketing Cloud, Eloqua, Click Dimensions campaigns
+- HTML design and automated journey management
+- Process consolidation with agile methodologies
+
+### 3. Inadaptado.cl (Entrepreneurship)
+
+**Position**: Chief Executive Officer  
+**Duration**: Enero 2020 - Actualidad  
+**Logo**: `/assets/images/work_inadaptado.png`
+
+**Key responsibilities**:
+- Boutique agency specializing in custom digital solutions
+- Web development (PHP, WordPress, WooCommerce)
+- UI/UX design, chatbots, and branding
+- Strategic consulting and creative production
+- Clients across clinics, design studios, hotels, retail, startups
+
+## Accordion Header Structure
+
+```astro
+<summary class="accordion-header">
+    <div class="logo">
+        <img src="/path/to/logo.png" alt="Company Name">
+    </div>
+    <div class="captions">
+        <h3 class="job">Job Title</h3>
+        <span class="company">Company Name</span>
+        <span class="date">Start Date - End Date</span>
+    </div>
+    <svg class="chevron"><!-- Chevron icon --></svg>
+</summary>
+```
+
+### Header Components
+
+1. **Logo** - 50x50px company image
+2. **Captions** - Job title, company, and dates
+3. **Chevron** - Animated arrow indicator
+
+## Styling
+
+### Accordion Container
+
+```css
+.accordion {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-medium);
+}
+```
+
+### Accordion Items
+
+Each item has a card-like appearance:
+
+```css
+.accordion-item {
+    background-color: var(--color-light);
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: box-shadow 0.25s ease;
+}
+
+.accordion-item:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+```
+
+### Header Layout
+
+```css
+.accordion-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    cursor: pointer;
+    list-style: none;
+}
+```
+
+### Logo Styling
+
+```css
+.accordion-header .logo {
+    flex-shrink: 0;
+    width: 50px;
+    height: 50px;
+    overflow: hidden;
+    border-radius: var(--border-radius);
+}
+
+.accordion-header .logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+```
+
+### Caption Typography
+
+```css
+.accordion-header .captions .job {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-dark);
+    margin-bottom: 0.15rem;
+}
+
+.accordion-header .captions .company {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--color-dark-grey);
+}
+
+.accordion-header .captions .date {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--color-light-grey);
+    margin-top: 0.1rem;
+}
+```
+
+### Chevron Animation
+
+The chevron rotates when the accordion is open:
+
+```css
+.accordion-header .chevron {
+    flex-shrink: 0;
+    width: 1.25rem;
+    height: 1.25rem;
+    color: var(--color-dark-grey);
+    transition: transform 0.3s ease;
+}
+
+.accordion-item[open] .chevron {
+    transform: rotate(180deg);
+}
+```
+
+### Content Area
+
+```css
+.accordion-content {
+    padding: 0 1rem 1rem 1rem;
+    border-top: 1px solid var(--color-light-grey);
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+```
+
+## Accessibility Features
+
+### Native `<details>` Element
+
+Using the native HTML `<details>` element provides:
+- Built-in keyboard navigation (Space/Enter to toggle)
+- Screen reader support
+- No JavaScript required for core functionality
+
+### Focus States
+
+```css
+.accordion-header:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: -2px;
+    border-radius: var(--border-radius);
+}
+```
+
+### Reduced Motion
+
+```css
+@media (prefers-reduced-motion: reduce) {
+    .accordion-content {
+        animation: none;
+    }
+    .accordion-header .chevron {
+        transition: none;
+    }
+}
+```
+
+## Default State
+
+The first accordion item (VML Chile) is open by default:
+
+```astro
+<details class="accordion-item" open>
+```
+
+## Adding New Experience
+
+To add a new job entry:
+
+1. Duplicate an existing `<details>` block
+2. Update the company logo path and alt text
+3. Modify job title, company name, and dates
+4. Replace description paragraphs
+5. Remove the `open` attribute unless it should be expanded by default
+
+Example:
+```astro
+<details class="accordion-item">
+    <summary class="accordion-header">
+        <div class="logo">
+            <img src="/assets/images/new_company.png" alt="New Company">
+        </div>
+        <div class="captions">
+            <h3 class="job">New Position</h3>
+            <span class="company">New Company</span>
+            <span class="date">Start - End</span>
+        </div>
+        <svg class="chevron"><!-- Icon --></svg>
+    </summary>
+    <div class="accordion-content">
+        <p>Description paragraph...</p>
+    </div>
+</details>
+```
+
+## Related Sections
+
+- [Skills Section](/sections/skills) - Related technical abilities
+- [History Section](/sections/history) - Professional background
+- [Contact Section](/sections/contact) - Get in touch

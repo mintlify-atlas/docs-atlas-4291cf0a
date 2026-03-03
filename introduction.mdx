@@ -1,0 +1,197 @@
+---
+title: Introduction
+description: Welcome to CV Staff Web - A modern, animated portfolio website built with Astro, featuring AI-powered interactions and stunning visual effects
+icon: 'house'
+---
+
+<img
+  className="block dark:hidden"
+  src="/images/hero-light.svg"
+  alt="CV Staff Web Hero Light"
+/>
+<img
+  className="hidden dark:block"
+  src="/images/hero-dark.svg"
+  alt="CV Staff Web Hero Dark"
+/>
+
+## Welcome to CV Staff Web
+
+CV Staff Web is a cutting-edge portfolio website that combines modern web technologies with stunning visual effects and AI-powered interactions. Built with Astro for optimal performance, this project showcases how to create an engaging, interactive personal website that stands out.
+
+<CardGroup cols={2}>
+  <Card
+    title="Quick Start"
+    icon="rocket"
+    href="/quickstart"
+  >
+    Get your development environment up and running in minutes
+  </Card>
+  <Card
+    title="Architecture"
+    icon="diagram-project"
+    href="/architecture/project-structure"
+  >
+    Understand the component-based structure and design patterns
+  </Card>
+  <Card
+    title="AI Chatbot"
+    icon="robot"
+    href="/features/ai-chatbot"
+  >
+    Learn how the Groq-powered AI assistant works
+  </Card>
+  <Card
+    title="Animations"
+    icon="wand-magic-sparkles"
+    href="/features/animations"
+  >
+    Explore GSAP animations and visual effects
+  </Card>
+</CardGroup>
+
+## Key Features
+
+### AI-Powered Chatbot
+
+Integrated with **Groq API** using the `llama-3.3-70b-versatile` model, the chatbot provides intelligent, context-aware responses about your professional background. The AI assistant maintains conversation history and includes built-in rate limiting for optimal API usage.
+
+```typescript
+const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
+const model = 'llama-3.3-70b-versatile';
+```
+
+<Info>
+  The chatbot uses a sophisticated system prompt to maintain personality consistency and provide accurate information based on profile data.
+</Info>
+
+### Stunning Visual Effects
+
+**Glassmorphism Cursor** - A custom cursor with glassmorphism effects that responds to interactive elements:
+
+- Backdrop blur with rgba transparency
+- Smooth follow animation with delay
+- Hover states for clickable elements
+- Automatically disabled on mobile and for reduced motion preferences
+
+**GSAP Animations** - Professional-grade animations throughout:
+
+- Hero section with staggered entrance animations
+- Scroll-triggered reveals using ScrollTrigger
+- Bouncing text effects for name display
+- Card-based transitions for interactive elements
+
+### Interactive Photo Slider
+
+Built with **Swiper.js** using the Cards effect:
+
+- Support for both images and videos
+- Auto-play video on active slide
+- Sound toggle controls
+- Smooth card-stack transitions
+- Touch-friendly on mobile devices
+
+```javascript
+const swiper = new Swiper('#heroSwiper', {
+  modules: [EffectCards, Pagination],
+  effect: 'cards',
+  grabCursor: true,
+  cardsEffect: {
+    slideShadows: true,
+    perSlideOffset: 8,
+    perSlideRotate: 2,
+  },
+});
+```
+
+### Component Architecture
+
+Modular, reusable Astro components:
+
+- `Badget.astro` - Animated status badge
+- `WelcomeCard.astro` - Hero welcome section with animated text
+- `MarqueeV1.astro` - Scrolling text banner
+- `SectionCard.astro` - Reusable content cards
+- `InfoTable.astro` - Structured data display
+
+### Accessibility Features
+
+<CardGroup cols={2}>
+  <Card icon="universal-access">
+    **Skip Links** - Jump to main content for keyboard navigation
+  </Card>
+  <Card icon="eye-slash">
+    **Reduced Motion** - Respects `prefers-reduced-motion` preference
+  </Card>
+  <Card icon="keyboard">
+    **Focus Indicators** - Clear visual focus states for all interactive elements
+  </Card>
+  <Card icon="language">
+    **ARIA Labels** - Proper labeling for screen readers
+  </Card>
+</CardGroup>
+
+## Technology Stack
+
+<CardGroup cols={3}>
+  <Card title="Astro" icon="rocket">
+    Modern static site generator with component islands architecture
+  </Card>
+  <Card title="GSAP" icon="chart-line">
+    Professional animation library with ScrollTrigger plugin
+  </Card>
+  <Card title="Swiper.js" icon="images">
+    Touch-enabled slider with advanced effects
+  </Card>
+  <Card title="Groq API" icon="brain">
+    Lightning-fast AI inference for chatbot responses
+  </Card>
+  <Card title="TypeScript" icon="code">
+    Type-safe development experience
+  </Card>
+  <Card title="Onest Variable" icon="font">
+    Modern variable font for optimal typography
+  </Card>
+</CardGroup>
+
+## Design Principles
+
+### Performance First
+
+- Astro's zero-JS by default approach
+- Optimized asset loading
+- Minimal bundle size with selective hydration
+
+### Mobile Responsive
+
+- Fluid layouts that adapt to all screen sizes
+- Touch-optimized interactions
+- Progressive enhancement for desktop features
+
+### User Experience
+
+- Smooth animations that don't overwhelm
+- Fast page loads
+- Intuitive navigation
+- Clear visual hierarchy
+
+<Note>
+  This documentation will help you understand, customize, and extend the CV Staff Web project to create your own unique portfolio experience.
+</Note>
+
+## Next Steps
+
+<Steps>
+  <Step title="Quick Start">
+    Follow the [Quick Start Guide](/quickstart) to set up your development environment
+  </Step>
+  <Step title="Explore Features">
+    Dive into individual features like the AI chatbot and animation system
+  </Step>
+  <Step title="Customize">
+    Learn how to adapt the design and content for your own portfolio
+  </Step>
+  <Step title="Deploy">
+    Deploy your customized site to production
+  </Step>
+</Steps>
