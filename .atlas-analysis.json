@@ -1,0 +1,123 @@
+{
+  "projectType": "frontend",
+  "projectName": "CV Staff Web",
+  "projectDescription": "Interactive personal portfolio website built with Astro.js featuring AI-powered chatbot, animated components, and dynamic content presentation",
+  "theme": "palm",
+  "primaryColor": "#ad0000",
+  "lightColor": "#ff9595",
+  "darkColor": "#8a0000",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "quickstart"
+            ]
+          },
+          {
+            "group": "Architecture",
+            "pages": [
+              "architecture/project-structure",
+              "architecture/components",
+              "architecture/sections",
+              "architecture/scripts"
+            ]
+          },
+          {
+            "group": "Components",
+            "pages": [
+              "components/badge",
+              "components/button-cta",
+              "components/info-table",
+              "components/marquee",
+              "components/section-card",
+              "components/welcome-card"
+            ]
+          },
+          {
+            "group": "Sections",
+            "pages": [
+              "sections/hero",
+              "sections/history",
+              "sections/skills",
+              "sections/works",
+              "sections/chatbot",
+              "sections/contact",
+              "sections/footer"
+            ]
+          },
+          {
+            "group": "Features",
+            "pages": [
+              "features/ai-chatbot",
+              "features/animations",
+              "features/glass-cursor",
+              "features/color-transitions"
+            ]
+          },
+          {
+            "group": "Customization",
+            "pages": [
+              "customization/profile-data",
+              "customization/styling",
+              "customization/environment-variables"
+            ]
+          },
+          {
+            "group": "Deployment",
+            "pages": [
+              "deployment/build",
+              "deployment/hosting"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "Data Schema",
+            "pages": [
+              "api/profile-schema",
+              "api/hero-sliders"
+            ]
+          },
+          {
+            "group": "Scripts",
+            "pages": [
+              "api/animations-api",
+              "api/glass-cursor-api",
+              "api/color-transition-api"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "AI-powered chatbot using Groq API for interactive Q&A",
+    "Animated photo slider with video support using Swiper.js",
+    "Glassmorphism cursor effects with GSAP animations",
+    "Responsive component-based architecture",
+    "Dynamic color transitions and scroll animations",
+    "Structured profile data with JSON schema"
+  ],
+  "publicApiSurface": [
+    "WelcomeCard component",
+    "MarqueeV1 component",
+    "ButtonCta component",
+    "InfoTable component",
+    "Badget component",
+    "SectionCard component",
+    "Hero section with photo slider",
+    "Chatbot section with AI integration",
+    "History, Skills, Works, Contact sections",
+    "Animation utilities (GSAP-based)",
+    "Glass cursor effect",
+    "Color transition system"
+  ]
+}
